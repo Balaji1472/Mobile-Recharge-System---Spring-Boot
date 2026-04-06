@@ -6,17 +6,15 @@ import com.mrs.enpoint.entity.Plan;
 import com.mrs.enpoint.feature.auditlog.enums.AuditAction;
 import com.mrs.enpoint.feature.auditlog.enums.EntityName;
 import com.mrs.enpoint.feature.auditlog.service.AuditService;
-import com.mrs.enpoint.feature.category.exception.CategoryNotFoundException;
 import com.mrs.enpoint.feature.category.repository.CategoryRepository;
-import com.mrs.enpoint.feature.operator.exception.OperatorNotFoundException;
 import com.mrs.enpoint.feature.operator.repository.OperatorRepository;
 import com.mrs.enpoint.feature.plan.dto.PlanRequestDTO;
 import com.mrs.enpoint.feature.plan.dto.PlanResponseDTO;
-import com.mrs.enpoint.feature.plan.exception.DuplicatePlanException;
-import com.mrs.enpoint.feature.plan.exception.PlanNotFoundException;
 import com.mrs.enpoint.feature.plan.mapper.PlanMapper;
 import com.mrs.enpoint.feature.plan.repository.PlanRepository;
 import com.mrs.enpoint.shared.exception.BusinessException;
+import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
+import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,16 +47,17 @@ public class PlanServiceImpl implements PlanService {
 	public PlanResponseDTO createPlan(PlanRequestDTO request) {
 		validatePlanRequest(request);
 
-		Operator operator = operatorRepository.findById(request.getOperatorId()).orElseThrow(
-				() -> new OperatorNotFoundException("Operator not found with id: " + request.getOperatorId()));
+		Operator operator = operatorRepository.findById(request.getOperatorId())
+				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + request.getOperatorId()));
 
-		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
-				() -> new CategoryNotFoundException("Category not found with id: " + request.getCategoryId()));
+		Category category = categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new NotFoundException("Category not found with id: " + request.getCategoryId()));
 
 		String planName = request.getPlanName().trim();
 
 		if (planRepository.existsByOperator_OperatorIdAndPlanName(request.getOperatorId(), planName)) {
-			throw new DuplicatePlanException("Plan with name '" + planName + "' already exists under this operator");
+			throw new DuplicateAlreadyExistsException(
+					"Plan with name '" + planName + "' already exists under this operator");
 		}
 
 		Plan plan = new Plan();
@@ -89,14 +88,14 @@ public class PlanServiceImpl implements PlanService {
 	@Override
 	public PlanResponseDTO getPlanById(int id) {
 		Plan plan = planRepository.findById(id)
-				.orElseThrow(() -> new PlanNotFoundException("Plan not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Plan not found with id: " + id));
 		return PlanMapper.toResponseDTO(plan);
 	}
 
 	@Override
 	public List<PlanResponseDTO> getPlansByOperator(int operatorId) {
 		if (!operatorRepository.existsById(operatorId)) {
-			throw new OperatorNotFoundException("Operator not found with id: " + operatorId);
+			throw new NotFoundException("Operator not found with id: " + operatorId);
 		}
 		return planRepository.findByOperator_OperatorId(operatorId).stream().map(plan -> PlanMapper.toResponseDTO(plan))
 				.collect(Collectors.toList());
@@ -105,7 +104,7 @@ public class PlanServiceImpl implements PlanService {
 	@Override
 	public List<PlanResponseDTO> getPlansByCategory(int categoryId) {
 		if (!categoryRepository.existsById(categoryId)) {
-			throw new CategoryNotFoundException("Category not found with id: " + categoryId);
+			throw new NotFoundException("Category not found with id: " + categoryId);
 		}
 		return planRepository.findByCategory_CategoryId(categoryId).stream().map(plan -> PlanMapper.toResponseDTO(plan))
 				.collect(Collectors.toList());
@@ -117,17 +116,18 @@ public class PlanServiceImpl implements PlanService {
 		validatePlanRequest(request);
 
 		Plan existing = planRepository.findById(id)
-				.orElseThrow(() -> new PlanNotFoundException("Plan not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Plan not found with id: " + id));
 
 		// If plan name changed, check for duplicate under the same operator
 		String planName = request.getPlanName().trim();
 		if (!existing.getPlanName().equals(planName) && planRepository
 				.existsByOperator_OperatorIdAndPlanName(existing.getOperator().getOperatorId(), planName)) {
-			throw new DuplicatePlanException("Plan with name '" + planName + "' already exists under this operator");
+			throw new DuplicateAlreadyExistsException(
+					"Plan with name '" + planName + "' already exists under this operator");
 		}
 
-		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
-				() -> new CategoryNotFoundException("Category not found with id: " + request.getCategoryId()));
+		Category category = categoryRepository.findById(request.getCategoryId())
+				.orElseThrow(() -> new NotFoundException("Category not found with id: " + request.getCategoryId()));
 
 		String oldValue = "name=" + existing.getPlanName() + ", price=" + existing.getPrice();
 
@@ -157,7 +157,7 @@ public class PlanServiceImpl implements PlanService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void activatePlan(int id) {
 		Plan plan = planRepository.findById(id)
-				.orElseThrow(() -> new PlanNotFoundException("Plan not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Plan not found with id: " + id));
 		plan.setIsActive(true);
 		planRepository.save(plan);
 
@@ -169,7 +169,7 @@ public class PlanServiceImpl implements PlanService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void deactivatePlan(int id) {
 		Plan plan = planRepository.findById(id)
-				.orElseThrow(() -> new PlanNotFoundException("Plan not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Plan not found with id: " + id));
 		plan.setIsActive(false);
 		planRepository.save(plan);
 

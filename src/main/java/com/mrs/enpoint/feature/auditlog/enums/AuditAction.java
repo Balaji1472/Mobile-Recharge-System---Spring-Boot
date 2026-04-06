@@ -37,7 +37,12 @@ public enum AuditAction {
     RECHARGE_SUCCESS,
     RECHARGE_FAILED,
     REFUND_COMPLETED,
-
+    PAYMENT_RETRY,
+    
+    SAVE_NUMBER,         
+    UPDATE_SAVED_NUMBER, 
+    DELETE_SAVED_NUMBER,
+    
     CONFIG_UPDATE,
     CRON_JOB_EXECUTION
     

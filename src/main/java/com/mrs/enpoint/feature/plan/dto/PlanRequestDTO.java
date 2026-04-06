@@ -2,13 +2,22 @@ package com.mrs.enpoint.feature.plan.dto;
 
 import java.math.BigDecimal;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 public class PlanRequestDTO {
 
+	
     private int operatorId;
     private int categoryId;
+    
+    @NotBlank(message="Plan name is required")
     private String planName;
+    
+    @Positive(message="enter the positive value greater than 0")
     private BigDecimal price;
-    private Integer validityDays;
+    
+    private int validityDays;
     private String dataBenefits;
     private String callBenefits;
     private String smsBenefits;
@@ -45,11 +54,11 @@ public class PlanRequestDTO {
         this.price = price;
     }
 
-    public Integer getValidityDays() {
+    public int getValidityDays() {
         return validityDays;
     }
 
-    public void setValidityDays(Integer validityDays) {
+    public void setValidityDays(int validityDays) {
         this.validityDays = validityDays;
     }
 

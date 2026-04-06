@@ -4,6 +4,8 @@ import com.mrs.enpoint.feature.planoffer.dto.PlanOfferRequestDTO;
 import com.mrs.enpoint.feature.planoffer.dto.PlanOfferResponseDTO;
 import com.mrs.enpoint.feature.planoffer.service.PlanOfferService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class PlanOfferController {
 
 	// Admin — Map an offer to a plan
 	@PostMapping("/{planId}/offers")
-	public ResponseEntity<PlanOfferResponseDTO> mapOfferToPlan(@PathVariable int planId,
+	public ResponseEntity<PlanOfferResponseDTO> mapOfferToPlan(@Valid @PathVariable int planId,
 			@RequestBody PlanOfferRequestDTO request) {
 		return new ResponseEntity<>(planOfferService.mapOfferToPlan(planId, request), HttpStatus.CREATED);
 	}

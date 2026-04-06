@@ -4,6 +4,8 @@ import com.mrs.enpoint.feature.plan.dto.PlanRequestDTO;
 import com.mrs.enpoint.feature.plan.dto.PlanResponseDTO;
 import com.mrs.enpoint.feature.plan.service.PlanService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class PlanController {
 
 	// Create
 	@PostMapping
-	public ResponseEntity<PlanResponseDTO> createPlan(@RequestBody PlanRequestDTO request) {
+	public ResponseEntity<PlanResponseDTO> createPlan(@Valid @RequestBody PlanRequestDTO request) {
 		return new ResponseEntity<>(planService.createPlan(request), HttpStatus.CREATED);
 	}
 
@@ -52,7 +54,7 @@ public class PlanController {
 
 	// Update
 	@PutMapping("/{id}")
-	public ResponseEntity<PlanResponseDTO> updatePlan(@PathVariable int id, @RequestBody PlanRequestDTO request) {
+	public ResponseEntity<PlanResponseDTO> updatePlan(@Valid @PathVariable int id, @RequestBody PlanRequestDTO request) {
 		return ResponseEntity.ok(planService.updatePlan(id, request));
 	}
 

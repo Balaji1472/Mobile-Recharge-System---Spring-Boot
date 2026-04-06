@@ -16,6 +16,8 @@ import com.mrs.enpoint.feature.offer.dto.OfferRequestDTO;
 import com.mrs.enpoint.feature.offer.dto.OfferResponseDTO;
 import com.mrs.enpoint.feature.offer.service.OfferService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/offers")
 public class OfferController {
@@ -28,7 +30,7 @@ public class OfferController {
 
 	// create
 	@PostMapping
-	public ResponseEntity<OfferResponseDTO> createOffer(@RequestBody OfferRequestDTO request) {
+	public ResponseEntity<OfferResponseDTO> createOffer(@Valid @RequestBody OfferRequestDTO request) {
 		OfferResponseDTO response = offerService.createOffer(request);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
@@ -47,7 +49,7 @@ public class OfferController {
 
 	// update offer
 	@PutMapping("/{id}")
-	public ResponseEntity<OfferResponseDTO> updateOffer(@PathVariable int id, @RequestBody OfferRequestDTO request) {
+	public ResponseEntity<OfferResponseDTO> updateOffer(@Valid @PathVariable int id, @RequestBody OfferRequestDTO request) {
 
 		return ResponseEntity.ok(offerService.updateOffer(id, request));
 	}
@@ -69,7 +71,7 @@ public class OfferController {
 	// end offer
 	@PutMapping("/{id}/end")
 	public ResponseEntity<String> endOffer(@PathVariable int id) {
-		offerService.deactivate(id); // OR custom logic if you implemented endDate = today
+		offerService.deactivate(id); 
 		return ResponseEntity.ok("Offer ended successfully");
 	}
 }

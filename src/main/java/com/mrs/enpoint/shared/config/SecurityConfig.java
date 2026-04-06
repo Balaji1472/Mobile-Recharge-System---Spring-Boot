@@ -14,43 +14,57 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.mrs.enpoint.shared.security.JwtAuthFilter;
 
- 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
 	private final JwtAuthFilter jwtAuthFilter;
-	
+
 	public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
 		this.jwtAuthFilter = jwtAuthFilter;
 	}
-	
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
 
-                // Public — no login needed
-                .requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout").permitAll()
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-                // Guest — read-only public browsing 
-                .requestMatchers(HttpMethod.GET,
-                    "/plans/**", "/offers/**", "/operators/**", "/categories/**").permitAll()
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth
 
-                // Everything else requires a valid JWT
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+						// Public — no login needed
+						.requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout").permitAll()
 
-        return http.build();
-    }
+						// Guest — read-only public browsing
+						.requestMatchers(HttpMethod.GET, "/plans/**", "/offers/**", "/operators/**", "/categories/**")
+						.permitAll()
+
+						// Recharges — authenticated users only
+						.requestMatchers("/recharges/**").authenticated()
+
+						// Payments — authenticated users only
+						.requestMatchers("/payments/**").authenticated()
+
+						// Transactions — authenticated users only
+						.requestMatchers("/transactions/**").authenticated()
+						
+						// Notifications — authenticated users only
+		                .requestMatchers("/notifications/**").authenticated()
+		 
+		                // Invoices — authenticated users only
+		                .requestMatchers("/invoices/**").authenticated()
+		 
+		                // Saved Numbers — USER only (method-level enforced)
+		                .requestMatchers("/saved-numbers/**").authenticated()
+
+						// Everything else requires a valid JWT
+						.anyRequest().authenticated())
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
 }

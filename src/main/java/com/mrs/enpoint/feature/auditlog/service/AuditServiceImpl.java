@@ -11,9 +11,9 @@ import com.mrs.enpoint.entity.AuditLog;
 import com.mrs.enpoint.feature.auditlog.dto.AuditResponseDTO;
 import com.mrs.enpoint.feature.auditlog.enums.AuditAction;
 import com.mrs.enpoint.feature.auditlog.enums.EntityName;
-import com.mrs.enpoint.feature.auditlog.exception.LogNotFoundException;
 import com.mrs.enpoint.feature.auditlog.mapper.AuditMapper;
 import com.mrs.enpoint.feature.auditlog.repository.AuditLogRepository;
+import com.mrs.enpoint.shared.exception.NotFoundException;
 
 @Service
 public class AuditServiceImpl implements AuditService {
@@ -52,7 +52,7 @@ public class AuditServiceImpl implements AuditService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public AuditResponseDTO getLogById(int id) {
 		AuditLog auditLog = auditLogRepository.findById(id)
-				.orElseThrow(() -> new LogNotFoundException("Log not found with id: "+id));
+				.orElseThrow(() -> new NotFoundException("Log not found with id: "+id));
 		return AuditMapper.toResponseDTO(auditLog);
 	}
 	

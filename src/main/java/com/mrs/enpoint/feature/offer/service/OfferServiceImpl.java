@@ -6,8 +6,6 @@ import com.mrs.enpoint.feature.auditlog.enums.EntityName;
 import com.mrs.enpoint.feature.auditlog.service.AuditService;
 import com.mrs.enpoint.feature.offer.dto.OfferRequestDTO;
 import com.mrs.enpoint.feature.offer.dto.OfferResponseDTO;
-import com.mrs.enpoint.feature.offer.exception.OfferAlreadyExistsException;
-import com.mrs.enpoint.feature.offer.exception.OfferDoesNotExistException;
 import com.mrs.enpoint.feature.offer.mapper.OfferMapper;
 import com.mrs.enpoint.feature.offer.repository.OfferRepository;
 import com.mrs.enpoint.shared.exception.*;
@@ -38,26 +36,12 @@ public class OfferServiceImpl implements OfferService {
 	public OfferResponseDTO createOffer(OfferRequestDTO request) {
 
 		// validation
-		if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
-			throw new BusinessException("Title is required");
-		}
-
-		if (request.getDiscountValue() == null || request.getDiscountValue().compareTo(BigDecimal.ZERO) <= 0) {
-			throw new BusinessException("Discount must be greater than zero");
-		}
-
-		if (request.getStartDate() == null || request.getEndDate() == null) {
-			throw new BusinessException("Start date and end date are required");
-		}
-
-		if (request.getStartDate().isAfter(request.getEndDate())) {
-			throw new BusinessException("Start date cannot be after end date");
-		}
-
+		validateRequest(request);
+		
 		String offerTitle = request.getTitle().toUpperCase().trim();
 
 		if (offerRepository.existsByTitle(offerTitle)) {
-			throw new OfferAlreadyExistsException("Offer already exists");
+			throw new DuplicateAlreadyExistsException("Offer already exists");
 		}
 
 		Offer offer = new Offer();
@@ -86,7 +70,7 @@ public class OfferServiceImpl implements OfferService {
 	@Override
 	public OfferResponseDTO getOfferById(int id) {
 		Offer offer = offerRepository.findById(id)
-				.orElseThrow(() -> new OfferDoesNotExistException("Offer not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Offer not found with id: " + id));
 		return OfferMapper.toResponseDTO(offer);
 	}
 
@@ -94,7 +78,7 @@ public class OfferServiceImpl implements OfferService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public OfferResponseDTO updateOffer(int id, OfferRequestDTO request) {
 		Offer existing = offerRepository.findById(id)
-				.orElseThrow(() -> new OfferDoesNotExistException("Offer not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Offer not found with id: " + id));
 
 		validateRequest(request);
 
@@ -118,7 +102,7 @@ public class OfferServiceImpl implements OfferService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void deactivate(int id) {
 		Offer offer = offerRepository.findById(id)
-				.orElseThrow(() -> new OfferDoesNotExistException("Offer not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Offer not found with id: " + id));
 
 		if (!offer.getIsActive()) {
 			throw new BusinessException("Offer already inactive");
@@ -137,7 +121,7 @@ public class OfferServiceImpl implements OfferService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void activate(int id) {
 		Offer offer = offerRepository.findById(id)
-				.orElseThrow(() -> new OfferDoesNotExistException("Offer not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Offer not found with id: " + id));
 
 		if (offer.getIsActive()) {
 			throw new BusinessException("Offer already active");
@@ -167,7 +151,7 @@ public class OfferServiceImpl implements OfferService {
 	@Override
 	public OfferResponseDTO getActiveOfferById(int id) {
 		Offer offer = offerRepository.findByOfferIdAndIsActiveTrue(id)
-				.orElseThrow(() -> new OfferDoesNotExistException("Active offer not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Active offer not found with id: " + id));
 
 		LocalDate today = LocalDate.now();
 

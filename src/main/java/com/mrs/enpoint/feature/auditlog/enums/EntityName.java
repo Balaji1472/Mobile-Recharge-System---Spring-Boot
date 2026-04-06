@@ -2,12 +2,15 @@ package com.mrs.enpoint.feature.auditlog.enums;
 
 public enum EntityName {
 
-	USER,
+    USER,
     OFFER,
     PLAN,
     CATEGORY,
     OPERATOR,
     RECHARGE,
-    REFUND 
-    
+    PAYMENT,
+    REFUND,
+    NOTIFICATION,
+    INVOICE,
+    SAVED_NUMBER
 }

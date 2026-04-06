@@ -2,13 +2,13 @@ package com.mrs.enpoint.feature.user.service;
 
 import com.mrs.enpoint.entity.User;
 import com.mrs.enpoint.feature.auth.dto.UserResponseDTO;
-import com.mrs.enpoint.feature.auth.exception.UserNotFoundException;
 import com.mrs.enpoint.feature.auth.mapper.UserMapper;
 import com.mrs.enpoint.feature.auth.repository.UserRepository;
 import com.mrs.enpoint.feature.auditlog.enums.AuditAction;
 import com.mrs.enpoint.feature.auditlog.enums.EntityName;
 import com.mrs.enpoint.feature.auditlog.service.AuditService;
 import com.mrs.enpoint.feature.user.dto.UserStatusRequestDTO;
+import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,14 +33,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public List<UserResponseDTO> getAllUsers() {
-		return userRepository.findAll().stream().map(UserMapper::toResponseDTO).collect(Collectors.toList());
+		return userRepository.findAll().stream().map(user -> UserMapper.toResponseDTO(user)).collect(Collectors.toList());
 	}
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public UserResponseDTO getUserById(int id) {
 		User user = userRepository.findById(id)
-				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("User not found with id: " + id));
 		return UserMapper.toResponseDTO(user);
 	}
 
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	public UserResponseDTO updateUserStatus(int id, UserStatusRequestDTO request) {
 
 		User user = userRepository.findById(id)
-				.orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("User not found with id: " + id));
 
 		String oldStatus = user.getStatus().name();
 		user.setStatus(request.getStatus());

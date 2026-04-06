@@ -6,16 +6,13 @@ import com.mrs.enpoint.entity.PlanOffer;
 import com.mrs.enpoint.feature.auditlog.enums.AuditAction;
 import com.mrs.enpoint.feature.auditlog.enums.EntityName;
 import com.mrs.enpoint.feature.auditlog.service.AuditService;
-import com.mrs.enpoint.feature.offer.exception.OfferDoesNotExistException;
 import com.mrs.enpoint.feature.offer.repository.OfferRepository;
-import com.mrs.enpoint.feature.plan.exception.PlanNotFoundException;
 import com.mrs.enpoint.feature.plan.repository.PlanRepository;
 import com.mrs.enpoint.feature.planoffer.dto.PlanOfferRequestDTO;
 import com.mrs.enpoint.feature.planoffer.dto.PlanOfferResponseDTO;
-import com.mrs.enpoint.feature.planoffer.exception.DuplicatePlanOfferException;
-import com.mrs.enpoint.feature.planoffer.exception.PlanOfferNotFoundException;
 import com.mrs.enpoint.feature.planoffer.mapper.PlanOfferMapper;
 import com.mrs.enpoint.feature.planoffer.repository.PlanOfferRepository;
+import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
@@ -46,7 +43,7 @@ public class PlanOfferServiceImpl implements PlanOfferService {
 	@Override
 	public List<PlanOfferResponseDTO> getOffersByPlan(int planId) {
 		if (!planRepository.existsById(planId)) {
-			throw new PlanNotFoundException("Plan not found with id: " + planId);
+			throw new NotFoundException("Plan not found with id: " + planId);
 		}
 		
 		if(planOfferRepository.findByPlan_PlanId(planId).isEmpty()) {
@@ -61,13 +58,13 @@ public class PlanOfferServiceImpl implements PlanOfferService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public PlanOfferResponseDTO mapOfferToPlan(int planId, PlanOfferRequestDTO request) {
 		Plan plan = planRepository.findById(planId)
-				.orElseThrow(() -> new PlanNotFoundException("Plan not found with id: " + planId));
+				.orElseThrow(() -> new NotFoundException("Plan not found with id: " + planId));
 
 		Offer offer = offerRepository.findById(request.getOfferId())
-				.orElseThrow(() -> new OfferDoesNotExistException("Offer not found with id: " + request.getOfferId()));
+				.orElseThrow(() -> new NotFoundException("Offer not found with id: " + request.getOfferId()));
 
 		if (planOfferRepository.existsByPlan_PlanIdAndOffer_OfferId(planId, request.getOfferId())) {
-			throw new DuplicatePlanOfferException(
+			throw new DuplicateAlreadyExistsException(
 					"Offer with id " + request.getOfferId() + " is already mapped to plan with id " + planId);
 		}
 
@@ -88,11 +85,11 @@ public class PlanOfferServiceImpl implements PlanOfferService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void unmapOfferFromPlan(int planId, int offerId) {
 		if (!planRepository.existsById(planId)) {
-			throw new PlanNotFoundException("Plan not found with id: " + planId);
+			throw new NotFoundException("Plan not found with id: " + planId);
 		}
 
 		PlanOffer planOffer = planOfferRepository.findByPlan_PlanIdAndOffer_OfferId(planId, offerId)
-				.orElseThrow(() -> new PlanOfferNotFoundException(
+				.orElseThrow(() -> new NotFoundException(
 						"No mapping found for planId=" + planId + " and offerId=" + offerId));
 
 		planOfferRepository.delete(planOffer);

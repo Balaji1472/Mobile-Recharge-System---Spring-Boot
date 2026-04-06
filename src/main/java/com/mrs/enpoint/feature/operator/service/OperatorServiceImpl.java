@@ -13,12 +13,12 @@ import com.mrs.enpoint.feature.auditlog.service.AuditService;
 import com.mrs.enpoint.feature.auth.enums.Status;
 import com.mrs.enpoint.feature.operator.dto.OperatorRequestDTO;
 import com.mrs.enpoint.feature.operator.dto.OperatorResponseDTO;
-import com.mrs.enpoint.feature.operator.exception.DuplicateOperatorException;
-import com.mrs.enpoint.feature.operator.exception.OperatorNotFoundException;
 import com.mrs.enpoint.feature.operator.mapper.OperatorMapper;
 import com.mrs.enpoint.feature.operator.repository.OperatorRepository;
 import com.mrs.enpoint.feature.plan.repository.PlanRepository;
 import com.mrs.enpoint.shared.exception.BusinessException;
+import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
+import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
 @Service
@@ -39,13 +39,13 @@ public class OperatorServiceImpl implements OperatorService {
 
 	@Override
 	public List<OperatorResponseDTO> getAllOperators() {
-		return operatorRepository.findAll().stream().map(OperatorMapper::toResponseDTO).collect(Collectors.toList());
+		return operatorRepository.findAll().stream().map(operator -> OperatorMapper.toResponseDTO(operator)).collect(Collectors.toList());
 	}
 
 	@Override
 	public OperatorResponseDTO getOperatorById(int id) {
 		Operator operator = operatorRepository.findById(id)
-				.orElseThrow(() -> new OperatorNotFoundException("Operator not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + id));
 		return OperatorMapper.toResponseDTO(operator);
 	}
  
@@ -55,7 +55,7 @@ public class OperatorServiceImpl implements OperatorService {
 		String name = request.getOperatorName().toUpperCase().trim();
 
 		if (operatorRepository.existsByOperatorName(name)) {
-			throw new DuplicateOperatorException("Operator name already exists");
+			throw new DuplicateAlreadyExistsException("Operator name already exists");
 		}
 
 		Operator operator = new Operator();
@@ -74,7 +74,7 @@ public class OperatorServiceImpl implements OperatorService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public OperatorResponseDTO updateOperator(int id, OperatorRequestDTO request) {
 		Operator existing = operatorRepository.findById(id)
-				.orElseThrow(() -> new OperatorNotFoundException("Operator not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + id));
 		String oldName = existing.getName();
 		existing.setName(request.getOperatorName());
 		existing.setStatus(request.getStatus());
@@ -90,7 +90,7 @@ public class OperatorServiceImpl implements OperatorService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void activateOperator(int id) {
 		Operator operator = operatorRepository.findById(id)
-				.orElseThrow(() -> new OperatorNotFoundException("Operator not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + id));
 
 		// Check if already active
 		if (operator.getStatus() == Status.ACTIVE) {
@@ -108,7 +108,7 @@ public class OperatorServiceImpl implements OperatorService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void deactivateOperator(int id) {
 		Operator operator = operatorRepository.findById(id)
-				.orElseThrow(() -> new OperatorNotFoundException("Operator not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + id));
 
 		// Check if already inactive
 		if (operator.getStatus() == Status.INACTIVE) {

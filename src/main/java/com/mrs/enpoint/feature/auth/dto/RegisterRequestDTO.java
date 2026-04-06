@@ -2,7 +2,6 @@ package com.mrs.enpoint.feature.auth.dto;
 
 import com.mrs.enpoint.feature.auth.enums.Gender;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,7 +17,7 @@ public class RegisterRequestDTO {
 	private Gender gender;
 
 	@NotBlank(message = "Email is required")
-	@Email(message = "Invalid email format")
+	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", message = "Invalid email format")
 	private String email;
 
 	@NotBlank(message = "Password is required")

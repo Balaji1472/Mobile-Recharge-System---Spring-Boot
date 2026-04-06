@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +20,21 @@ import com.mrs.enpoint.feature.auth.dto.UpdateProfileRequestDTO;
 import com.mrs.enpoint.feature.auth.dto.UserResponseDTO;
 import com.mrs.enpoint.feature.auth.enums.RoleType;
 import com.mrs.enpoint.feature.auth.enums.Status;
-import com.mrs.enpoint.feature.auth.exception.InvalidCredentialsException;
-import com.mrs.enpoint.feature.auth.exception.SamePasswordException;
-import com.mrs.enpoint.feature.auth.exception.UserAlreadyExistsException;
-import com.mrs.enpoint.feature.auth.exception.UserNotFoundException;
 import com.mrs.enpoint.feature.auth.mapper.AuthMapper;
 import com.mrs.enpoint.feature.auth.mapper.UserMapper;
 import com.mrs.enpoint.feature.auth.repository.RevokedTokenRepository;
 import com.mrs.enpoint.feature.auth.repository.RoleRepository;
 import com.mrs.enpoint.feature.auth.repository.UserRepository;
+import com.mrs.enpoint.feature.recharge.enums.ConnectionStatus;
+import com.mrs.enpoint.feature.recharge.repository.MobileConnectionRepository;
 import com.mrs.enpoint.shared.exception.BusinessException;
+import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
+import com.mrs.enpoint.shared.exception.InvalidCredentialsException;
+import com.mrs.enpoint.shared.exception.MobileNotRegisteredException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
+import com.mrs.enpoint.shared.exception.SamePasswordException;
 import com.mrs.enpoint.shared.exception.TokenExpiredException;
+import com.mrs.enpoint.shared.exception.UserAccessException;
 import com.mrs.enpoint.shared.security.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,44 +48,40 @@ public class AuthServiceImpl implements AuthService {
 	private final JwtUtil jwtUtil;
 	private final AuditService auditService;
 	private final RevokedTokenRepository revokedTokenRepository;
+	private final MobileConnectionRepository mobileConnectionRepository;
 
 	public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-			PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuditService auditService, RevokedTokenRepository revokedTokenRepository) {
+			PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuditService auditService, RevokedTokenRepository revokedTokenRepository, MobileConnectionRepository mobileConnectionRepository) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.jwtUtil = jwtUtil;
 		this.auditService = auditService;
 		this.revokedTokenRepository = revokedTokenRepository;
+		this.mobileConnectionRepository = mobileConnectionRepository;
 	}
 
 	@Override
 	public void register(RegisterRequestDTO request) {
 
-		if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
-			throw new IllegalArgumentException("Email is required");
-		}
-
-		if (request.getPassword() == null || request.getPassword().trim().isEmpty()) {
-			throw new IllegalArgumentException("Password is required");
-		}
-
-		if (request.getMobileNumber() == null || request.getMobileNumber().trim().isEmpty()) {
-			throw new IllegalArgumentException("Mobile number is required");
-		}
-
 		String email = request.getEmail().trim().toLowerCase();
+		
+		// mobile number check is there in mobile connection
+		if(!mobileConnectionRepository.existsByMobileNumberAndStatus(request.getMobileNumber(), ConnectionStatus.ACTIVE)) {
+			throw new MobileNotRegisteredException("Mobile number " + request.getMobileNumber() + " is not registered on this platform.");
+		}
 
+		
 		if (userRepository.existsByEmail(email)) {
-			throw new UserAlreadyExistsException("Email already registered");
+			throw new DuplicateAlreadyExistsException("Email already registered");
 		}
 
 		if (userRepository.existsByMobileNumber(request.getMobileNumber())) {
-			throw new UserAlreadyExistsException("Mobile number already registered");
+			throw new DuplicateAlreadyExistsException("Mobile number already registered");
 		}
 
 		Role role = roleRepository.findByRoleName(RoleType.USER)
-				.orElseThrow(() -> new BusinessException("USER role not found"));
+				.orElseThrow(() -> new NotFoundException("USER role not found"));
 
 		User user = new User();
 		user.setFullName(request.getFullName());
@@ -111,11 +109,11 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		if (user.getStatus() == Status.INACTIVE) {
-			throw new BusinessException("Account is inactive");
+			throw new UserAccessException("Account is inactive");
 		}
 
 		if (user.getStatus() == Status.BLOCKED) {
-			throw new BusinessException("Account is blocked");
+			throw new UserAccessException("Account is blocked");
 		}
 
 		String role = user.getRole().getRoleName().name();
@@ -138,7 +136,7 @@ public class AuthServiceImpl implements AuthService {
 				.orElseThrow(() -> new InvalidCredentialsException("User not found"));
 
 		if (user.getStatus() == Status.INACTIVE || user.getStatus() == Status.BLOCKED) {
-			throw new BusinessException("Account is not active");
+			throw new UserAccessException("Account is not active");
 		}
 
 		String role = user.getRole().getRoleName().name();
@@ -154,7 +152,7 @@ public class AuthServiceImpl implements AuthService {
 
 		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
 
 		if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
 			throw new InvalidCredentialsException("Current password is incorrect");
@@ -181,12 +179,12 @@ public class AuthServiceImpl implements AuthService {
 
 		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
 
 		// check mobile conflict only if it changed
 		if (!user.getMobileNumber().equals(request.getMobileNumber())
 				&& userRepository.existsByMobileNumber(request.getMobileNumber())) {
-			throw new UserAlreadyExistsException("Mobile number already in use");
+			throw new DuplicateAlreadyExistsException("Mobile number already in use");
 		}
 
 		user.setFullName(request.getFullName());
@@ -203,7 +201,7 @@ public class AuthServiceImpl implements AuthService {
 	    String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
 	    User user = userRepository.findByEmail(email)
-	            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+	            .orElseThrow(() -> new NotFoundException("User not found with email: " + email));
 
 	    return UserMapper.toResponseDTO(user);
 	}

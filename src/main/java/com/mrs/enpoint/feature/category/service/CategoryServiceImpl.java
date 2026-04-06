@@ -12,12 +12,12 @@ import com.mrs.enpoint.feature.auditlog.enums.EntityName;
 import com.mrs.enpoint.feature.auditlog.service.AuditService;
 import com.mrs.enpoint.feature.category.dto.CategoryRequestDTO;
 import com.mrs.enpoint.feature.category.dto.CategoryResponseDTO;
-import com.mrs.enpoint.feature.category.exception.CategoryNotFoundException;
-import com.mrs.enpoint.feature.category.exception.DuplicateCategoryException;
 import com.mrs.enpoint.feature.category.mapper.CategoryMapper;
 import com.mrs.enpoint.feature.category.repository.CategoryRepository;
 import com.mrs.enpoint.feature.plan.repository.PlanRepository;
 import com.mrs.enpoint.shared.exception.BusinessException;
+import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
+import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
 @Service
@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 		String code = request.getCategoryCode().toUpperCase().trim();
 
 		if (categoryRepository.existsByCategoryCode(code)) {
-			throw new DuplicateCategoryException("Category code already exists");
+			throw new DuplicateAlreadyExistsException("Category code already exists");
 		}
 
 		Category category = new Category();
@@ -67,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public CategoryResponseDTO getCategoryById(int id) {
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
 		return CategoryMapper.toResponseDTO(category);
 	}
 
@@ -75,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public CategoryResponseDTO updateCategory(int id, CategoryRequestDTO request) {
 		Category existing = categoryRepository.findById(id)
-				.orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
 		String oldValue = existing.getDisplayName();
 		existing.setDisplayName(request.getDisplayName());
 		Category saved = categoryRepository.save(existing);
@@ -90,19 +90,19 @@ public class CategoryServiceImpl implements CategoryService {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void activateCategory(int id) {
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
 		category.setIsActive(true);
 		categoryRepository.save(category);
 
 		auditService.log(securityUtils.getCurrentUserId(), EntityName.CATEGORY, id, AuditAction.ACTIVATE_CATEGORY,
 				"false", "true");
-	}
+	} 
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public void deactivateCategory(int id) {
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
+				.orElseThrow(() -> new NotFoundException("Category not found with id: " + id));
 
 		boolean hasActivePlans = planRepository.existsByCategory_CategoryIdAndIsActive(id, true);
 		if (hasActivePlans) {
