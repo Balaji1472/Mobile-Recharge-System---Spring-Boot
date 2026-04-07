@@ -16,6 +16,8 @@ import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,7 @@ public class PlanOfferServiceImpl implements PlanOfferService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public PlanOfferResponseDTO mapOfferToPlan(int planId, PlanOfferRequestDTO request) {
 		Plan plan = planRepository.findById(planId)
 				.orElseThrow(() -> new NotFoundException("Plan not found with id: " + planId));
@@ -83,6 +86,7 @@ public class PlanOfferServiceImpl implements PlanOfferService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public void unmapOfferFromPlan(int planId, int offerId) {
 		if (!planRepository.existsById(planId)) {
 			throw new NotFoundException("Plan not found with id: " + planId);

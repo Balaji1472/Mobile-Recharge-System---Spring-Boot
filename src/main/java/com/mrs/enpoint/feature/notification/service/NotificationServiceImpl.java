@@ -54,6 +54,25 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
+	public void sendRefundNotification(int userId, String mobileNumber, String amount) {
+
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new BusinessException("User not found with id: " + userId));
+
+		String message = "Refund of Rs." + amount + " has been processed for " + mobileNumber
+				+ ". Amount will reflect in your account shortly.";
+
+		Notification notification = new Notification();
+		notification.setUser(user);
+		notification.setType(NotificationType.RECHARGE);
+		notification.setMessage(message);
+		notification.setSentAt(LocalDateTime.now());
+		notification.setReadStatus(false);
+		
+		notificationRepository.save(notification);
+	}
+
+	@Override
 	@PreAuthorize("hasRole('USER')")
 	public List<NotificationResponseDTO> getUnreadNotifications() {
 
@@ -132,7 +151,7 @@ public class NotificationServiceImpl implements NotificationService {
 		if (all.isEmpty()) {
 			throw new NotFoundException("No notifications found in the system");
 		}
-		
+
 		return all.stream().map(notify -> NotificationMapper.toResponseDTO(notify)).collect(Collectors.toList());
 	}
 }

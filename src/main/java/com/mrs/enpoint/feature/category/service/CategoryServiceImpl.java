@@ -20,6 +20,8 @@ import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -38,6 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public CategoryResponseDTO createCategory(CategoryRequestDTO request) {
 		String code = request.getCategoryCode().toUpperCase().trim();
 
@@ -73,6 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public CategoryResponseDTO updateCategory(int id, CategoryRequestDTO request) {
 		Category existing = categoryRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Category not found with id: " + id));

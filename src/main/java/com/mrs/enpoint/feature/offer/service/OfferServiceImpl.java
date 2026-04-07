@@ -11,6 +11,8 @@ import com.mrs.enpoint.feature.offer.repository.OfferRepository;
 import com.mrs.enpoint.shared.exception.*;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -33,6 +35,7 @@ public class OfferServiceImpl implements OfferService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public OfferResponseDTO createOffer(OfferRequestDTO request) {
 
 		// validation
@@ -76,6 +79,7 @@ public class OfferServiceImpl implements OfferService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public OfferResponseDTO updateOffer(int id, OfferRequestDTO request) {
 		Offer existing = offerRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Offer not found with id: " + id));

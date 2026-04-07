@@ -17,7 +17,7 @@ public class SecurityUtils {
 	public int getCurrentUserId() {
 		String email = SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal().toString();
-		return userRepository.findByEmail(email).map(user -> user.getUserId()).orElse(0); // 0 for scheduler (offer expiry)
+		return userRepository.findByEmail(email).map(user -> user.getUserId()).orElse(0); 
 				
 	}
 }

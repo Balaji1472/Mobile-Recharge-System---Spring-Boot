@@ -11,6 +11,8 @@ import com.mrs.enpoint.feature.user.dto.UserStatusRequestDTO;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public UserResponseDTO updateUserStatus(int id, UserStatusRequestDTO request) {
 
 		User user = userRepository.findById(id)

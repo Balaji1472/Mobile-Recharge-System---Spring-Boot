@@ -38,6 +38,7 @@ import com.mrs.enpoint.shared.exception.UserAccessException;
 import com.mrs.enpoint.shared.security.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -62,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
+	@Transactional
 	public void register(RegisterRequestDTO request) {
 
 		String email = request.getEmail().trim().toLowerCase();
@@ -148,6 +150,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@Transactional
 	public void changePassword(ChangePasswordRequestDTO request) {
 
 		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
@@ -175,6 +178,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@Transactional
 	public UserResponseDTO updateProfile(UpdateProfileRequestDTO request) {
 
 		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
@@ -210,20 +214,19 @@ public class AuthServiceImpl implements AuthService {
 	public void logout(HttpServletRequest request) {
 	    String authHeader = request.getHeader("Authorization");
 	    
-	    // Check if the header is missing or doesn't start with Bearer
+	    // check if the header is missing or doesn't start with Bearer
 	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 	        throw new NotFoundException("No valid authorization token found.");
 	    }
 
 	    String token = authHeader.substring(7);
-	    
-	    // Check if token is ALREADY revoked
+	         
+	    // check if token is ALREADY revoked
 	    if (revokedTokenRepository.existsByToken(token)) {
-	        // You can throw a specific exception here
 	        throw new TokenExpiredException("Token is already revoked and user is already logged out.");
 	    }
 	    
-	    // If valid and not revoked, save it to the blacklist
+	    // if valid and not revoked, save it to the blacklist
 	    revokedTokenRepository.save(new RevokedToken(token));
 	    
 	    SecurityContextHolder.clearContext();

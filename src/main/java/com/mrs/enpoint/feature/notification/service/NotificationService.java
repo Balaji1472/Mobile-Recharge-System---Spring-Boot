@@ -7,6 +7,8 @@ import java.util.List;
 public interface NotificationService {
 
     void sendRechargeNotification(int userId, boolean success, String mobileNumber, String amount);
+    
+    void sendRefundNotification(int userId, String mobileNumber, String amount);
 
     List<NotificationResponseDTO> getUnreadNotifications();
 

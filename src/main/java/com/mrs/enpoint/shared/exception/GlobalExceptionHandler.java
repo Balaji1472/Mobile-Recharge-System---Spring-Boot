@@ -18,7 +18,6 @@ import jakarta.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // --- helper Method ---
     private ResponseEntity<Map<String, Object>> buildError(HttpStatus status, String error, String message) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -27,8 +26,6 @@ public class GlobalExceptionHandler {
         body.put("message", message);
         return new ResponseEntity<>(body, status);
     }
-
-    // --- exception handlers ---
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException ex) {
@@ -39,30 +36,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleDuplicate(DuplicateAlreadyExistsException ex) {
         return buildError(HttpStatus.CONFLICT, "Duplicate Entry", ex.getMessage());
     }
-//
-//    @ExceptionHandler(NotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handleCategoryNotFound(NotFoundException ex) {
-//        return buildError(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
-//    }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Map<String, Object>> handleBusinessException(BusinessException ex) {
         return buildError(HttpStatus.BAD_REQUEST, "Business Error", ex.getMessage());
-    }
-
-//    @ExceptionHandler(DuplicateAlreadyExistsException.class)
-//    public ResponseEntity<Map<String, Object>> handleDuplicateCategory(DuplicateAlreadyExistsException ex) {
-//        return buildError(HttpStatus.CONFLICT, "Duplicate Entry", "Category code already exists");
-//    }
-
-//    @ExceptionHandler(NotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handleUserNotFound(NotFoundException ex) {
-//        return buildError(HttpStatus.NOT_FOUND, "Not found", ex.getMessage());
-//    }
-
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Map<String, Object>> handleUserAlreadyExists(UserAlreadyExistsException ex) {
-        return buildError(HttpStatus.CONFLICT, "Duplicate Entry", ex.getMessage());
     }
     
     @ExceptionHandler(UserAccessException.class)
@@ -74,7 +51,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleInputViolation(ConstraintViolationException ex){
     	return buildError(HttpStatus.BAD_REQUEST, "Constraint Violation", ex.getMessage());
     }
-
+  
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidCredentials(InvalidCredentialsException ex) {
         return buildError(HttpStatus.UNAUTHORIZED, "Unauthorized access", ex.getMessage());
@@ -84,56 +61,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleInvalidCredentials(AccessDeniedException ex) {
         return buildError(HttpStatus.FORBIDDEN, "Access Denied", ex.getMessage());
     }
-//
-//    @ExceptionHandler(NotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> offerNotFound(NotFoundException ex) {
-//        return buildError(HttpStatus.NOT_FOUND, "Not found", ex.getMessage());
-//    }
-
-//    @ExceptionHandler(DuplicateAlreadyExistsException.class)
-//    public ResponseEntity<Map<String, Object>> handleOfferAlreadyExists(DuplicateAlreadyExistsException ex) {
-//        return buildError(HttpStatus.CONFLICT, "Duplicate Entry", ex.getMessage());
-//    }
 
     @ExceptionHandler(FailedToLogException.class)
     public ResponseEntity<Map<String, Object>> handleFailedToStoreAuditLog(FailedToLogException ex) {
         return buildError(HttpStatus.BAD_REQUEST, "Bad Request", "Failed to log");
     }
 
-//    @ExceptionHandler(NotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handleLogNotFound(NotFoundException ex) {
-//        return buildError(HttpStatus.NOT_FOUND, "Not found", ex.getMessage());
-//    }
-
-//    @ExceptionHandler(NotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handlePlanNotFound(NotFoundException ex) {
-//        return buildError(HttpStatus.NOT_FOUND, "Not found", ex.getMessage());
-//    }
-
-//    @ExceptionHandler(DuplicateAlreadyExistsException.class)
-//    public ResponseEntity<Map<String, Object>> handlePlanAlreadyExists(DuplicateAlreadyExistsException ex) {
-//        return buildError(HttpStatus.CONFLICT, "Duplicate Entry", ex.getMessage());
-//    }
-
     @ExceptionHandler(SamePasswordException.class)
     public ResponseEntity<Map<String, Object>> handleSamePassword(SamePasswordException ex) {
         return buildError(HttpStatus.BAD_REQUEST, "Invalid Request", ex.getMessage());
     }
-
-//    @ExceptionHandler(NotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handlePlanOfferNotFound(NotFoundException ex) {
-//        return buildError(HttpStatus.NOT_FOUND, "Not found", ex.getMessage());
-//    }
-
-//    @ExceptionHandler(DuplicateAlreadyExistsException.class)
-//    public ResponseEntity<Map<String, Object>> handleDuplicatePlanOffer(DuplicateAlreadyExistsException ex) {
-//        return buildError(HttpStatus.CONFLICT, "Duplicate Entry", ex.getMessage());
-//    }
-
-//    @ExceptionHandler(NotFoundException.class)
-//    public ResponseEntity<Map<String, Object>> handleNotFound(NotFoundException ex) {
-//        return buildError(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
-//    }
 
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<Map<String, Object>> handleTokenExpired(TokenExpiredException ex) {
@@ -144,11 +81,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleMobileNotRegistered(MobileNotRegisteredException ex) {
         return buildError(HttpStatus.FORBIDDEN, "Mobile Not Registered", ex.getMessage());
     }
-    
-//    @ExceptionHandler(DuplicateAlreadyExistsException.class)
-//    public ResponseEntity<Map<String, Object>> handleDuplicateSavedNumber(DuplicateAlreadyExistsException ex) {
-//        return buildError(HttpStatus.CONFLICT, "Duplicate Entry", ex.getMessage());
-//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
@@ -156,7 +88,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors()
                 .forEach((FieldError fe) -> fieldErrors.put(fe.getField(), fe.getDefaultMessage()));
 
-        Map<String, Object> error = new LinkedHashMap<>(); // Consistent order
+        Map<String, Object> error = new LinkedHashMap<>(); 
         error.put("timestamp", LocalDateTime.now());
         error.put("status", HttpStatus.BAD_REQUEST.value());
         error.put("error", "Validation Failed");

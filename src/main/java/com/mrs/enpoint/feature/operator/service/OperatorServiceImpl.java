@@ -21,6 +21,8 @@ import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class OperatorServiceImpl implements OperatorService {
 
@@ -51,6 +53,7 @@ public class OperatorServiceImpl implements OperatorService {
  
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public OperatorResponseDTO createOperator(OperatorRequestDTO request) {
 		String name = request.getOperatorName().toUpperCase().trim();
 
@@ -72,6 +75,7 @@ public class OperatorServiceImpl implements OperatorService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public OperatorResponseDTO updateOperator(int id, OperatorRequestDTO request) {
 		Operator existing = operatorRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + id));

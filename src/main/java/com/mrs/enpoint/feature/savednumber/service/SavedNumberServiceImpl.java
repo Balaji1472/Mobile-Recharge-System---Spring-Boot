@@ -16,6 +16,8 @@ import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,7 @@ public class SavedNumberServiceImpl implements SavedNumberService {
 
 	@Override
 	@PreAuthorize("hasRole('USER')")
+	@Transactional
 	public SavedNumberResponseDTO saveNumber(SavedNumberRequestDTO request) {
 
 		int currentUserId = securityUtils.getCurrentUserId();
@@ -90,11 +93,12 @@ public class SavedNumberServiceImpl implements SavedNumberService {
 
 	@Override
 	@PreAuthorize("hasRole('USER')")
+	@Transactional
 	public SavedNumberResponseDTO updateNickname(int id, SavedNumberUpdateDTO request) {
 
 		int currentUserId = securityUtils.getCurrentUserId();
 
-		// Ownership check: record must belong to the current user
+		// ownership check: record must belong to the current user
 		SavedMobileNumber savedNumber = savedNumberRepository.findByIdAndUser_UserId(id, currentUserId)
 				.orElseThrow(() -> new NotFoundException("Saved number not found with id: " + id));
 
@@ -109,7 +113,7 @@ public class SavedNumberServiceImpl implements SavedNumberService {
 
 		int currentUserId = securityUtils.getCurrentUserId();
 
-		// Ownership check: record must belong to the current user
+		// ownership check: record must belong to the current user
 		SavedMobileNumber savedNumber = savedNumberRepository.findByIdAndUser_UserId(id, currentUserId)
 				.orElseThrow(() -> new NotFoundException("Saved number not found with id: " + id));
 

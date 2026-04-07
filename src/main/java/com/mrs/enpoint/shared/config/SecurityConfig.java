@@ -6,7 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+//import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,37 +32,32 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth
+		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
 
-						// Public — no login needed
-						.requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout").permitAll()
+				.requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout").permitAll()
 
-						// Guest — read-only public browsing
-						.requestMatchers(HttpMethod.GET, "/plans/**", "/offers/**", "/operators/**", "/categories/**")
-						.permitAll()
+				.requestMatchers(HttpMethod.GET, "/plans/**", "/offers/**", "/operators/**", "/categories/**")
+				.permitAll()
 
-						// Recharges — authenticated users only
-						.requestMatchers("/recharges/**").authenticated()
+				.requestMatchers("/recharges/**").authenticated()
 
-						// Payments — authenticated users only
-						.requestMatchers("/payments/**").authenticated()
+				.requestMatchers("/payments/**").authenticated()
 
-						// Transactions — authenticated users only
-						.requestMatchers("/transactions/**").authenticated()
-						
-						// Notifications — authenticated users only
-		                .requestMatchers("/notifications/**").authenticated()
-		 
-		                // Invoices — authenticated users only
-		                .requestMatchers("/invoices/**").authenticated()
-		 
-		                // Saved Numbers — USER only (method-level enforced)
-		                .requestMatchers("/saved-numbers/**").authenticated()
+				.requestMatchers("/transactions/**").authenticated()
 
-						// Everything else requires a valid JWT
-						.anyRequest().authenticated())
+				.requestMatchers("/notifications/**").authenticated()
+
+				.requestMatchers("/invoices/**").authenticated()
+
+				.requestMatchers("/saved-numbers/**").authenticated()
+
+				.requestMatchers("/refunds/**").authenticated()
+
+				.requestMatchers("/roles/**").authenticated()
+
+				.requestMatchers("/analytics/**").authenticated()
+
+				.anyRequest().authenticated())
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();

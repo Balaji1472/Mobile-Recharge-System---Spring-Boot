@@ -3,6 +3,7 @@ package com.mrs.enpoint.feature.payment.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import com.mrs.enpoint.feature.payment.mapper.PaymentMapper;
 import com.mrs.enpoint.feature.payment.repository.PaymentRepository;
 import com.mrs.enpoint.feature.recharge.enums.RechargeStatus;
 import com.mrs.enpoint.feature.recharge.repository.RechargeTransactionRepository;
+import com.mrs.enpoint.feature.refund.service.RefundService;
 import com.mrs.enpoint.shared.exception.BusinessException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
@@ -34,14 +36,18 @@ public class PaymentServiceImpl implements PaymentService {
 	private final UserRepository userRepository;
 	private final AuditService auditService;
 	private final SecurityUtils securityUtils;
+    private final RefundService refundService;
+
 
 	public PaymentServiceImpl(PaymentRepository paymentRepository, RechargeTransactionRepository rechargeRepository,
-			UserRepository userRepository, AuditService auditService, SecurityUtils securityUtils) {
+			UserRepository userRepository, AuditService auditService, SecurityUtils securityUtils, @Lazy RefundService refundService) {
 		this.paymentRepository = paymentRepository;
 		this.rechargeRepository = rechargeRepository;
 		this.userRepository = userRepository;
 		this.auditService = auditService;
 		this.securityUtils = securityUtils;
+        this.refundService = refundService;
+
 	}
 
 	@Override
@@ -110,6 +116,11 @@ public class PaymentServiceImpl implements PaymentService {
 		retryPayment.setStatus(PaymentStatus.SUCCESS);
 		Payment savedPayment = paymentRepository.save(retryPayment);
 
+		// auto refund 
+        if (lastPayment.getStatus() == PaymentStatus.SUCCESS && recharge.getStatus() == RechargeStatus.FAILED) {
+            refundService.processAutoRefund(lastPayment.getPaymentId());
+        }
+		
 		// update the recharge transaction to success
 		recharge.setStatus(RechargeStatus.SUCCESS);
 		recharge.setCompletedAt(LocalDateTime.now());

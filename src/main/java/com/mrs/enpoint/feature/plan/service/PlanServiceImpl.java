@@ -17,6 +17,8 @@ import com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException;
 import com.mrs.enpoint.shared.exception.NotFoundException;
 import com.mrs.enpoint.shared.security.SecurityUtils;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,7 @@ public class PlanServiceImpl implements PlanService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public PlanResponseDTO createPlan(PlanRequestDTO request) {
 		validatePlanRequest(request);
 
@@ -112,6 +115,7 @@ public class PlanServiceImpl implements PlanService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
 	public PlanResponseDTO updatePlan(int id, PlanRequestDTO request) {
 		validatePlanRequest(request);
 
