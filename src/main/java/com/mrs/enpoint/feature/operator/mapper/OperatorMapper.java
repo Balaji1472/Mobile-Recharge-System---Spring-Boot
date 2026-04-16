@@ -10,6 +10,7 @@ public class OperatorMapper {
         dto.setOperatorId(operator.getOperatorId());
         dto.setOperatorName(operator.getName());
         dto.setStatus(operator.getStatus());
+        dto.setTotalPlans(operator.getTotalPlans());
         return dto;
     }
 }

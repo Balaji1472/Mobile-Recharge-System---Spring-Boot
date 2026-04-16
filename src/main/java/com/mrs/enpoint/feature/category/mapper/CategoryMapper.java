@@ -14,6 +14,11 @@ public class CategoryMapper {
 		dto.setCategoryId(category.getCategoryId());
 		dto.setCategoryCode(category.getCategoryCode());
 		dto.setDisplayName(category.getDisplayName());
+		if (category.getPlans() != null) {
+            dto.setTotalPlans(category.getPlans().size());
+        } else {
+            dto.setTotalPlans(0);
+        }
 		dto.setIsActive(category.getIsActive());
 		return dto;
 	}

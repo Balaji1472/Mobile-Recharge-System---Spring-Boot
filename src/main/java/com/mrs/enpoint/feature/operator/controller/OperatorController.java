@@ -27,7 +27,12 @@ public class OperatorController {
     public ResponseEntity<List<OperatorResponseDTO>> getAllOperators() {
         return ResponseEntity.ok(operatorService.getAllOperators());
     }
-
+    
+    @GetMapping("/active")
+    public ResponseEntity<List<OperatorResponseDTO>> getActiveOperators() {
+        return ResponseEntity.ok(operatorService.getActiveOperators());
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<OperatorResponseDTO> getOperatorById(@PathVariable int id) {
         return ResponseEntity.ok(operatorService.getOperatorById(id));

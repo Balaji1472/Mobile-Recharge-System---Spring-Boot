@@ -5,6 +5,7 @@ public class CategoryResponseDTO {
 	private int categoryId;
 	private String categoryCode;
 	private String displayName;
+	private long totalPlans;
 	private Boolean isActive;
 
 	public int getCategoryId() {
@@ -13,6 +14,14 @@ public class CategoryResponseDTO {
 
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public long getTotalPlans() {
+		return totalPlans;
+	}
+
+	public void setTotalPlans(long totalPlans) {
+		this.totalPlans = totalPlans;
 	}
 
 	public String getCategoryCode() {

@@ -6,6 +6,7 @@ public class OperatorResponseDTO {
 
 	private int operatorId;
 	private String operatorName;
+	private int totalPlans;
 	private Status status;
 
 	public int getOperatorId() {
@@ -14,6 +15,14 @@ public class OperatorResponseDTO {
 
 	public void setOperatorId(int operatorId) {
 		this.operatorId = operatorId;
+	}
+
+	public int getTotalPlans() {
+		return totalPlans;
+	}
+
+	public void setTotalPlans(int totalPlans) {
+		this.totalPlans = totalPlans;
 	}
 
 	public String getOperatorName() {

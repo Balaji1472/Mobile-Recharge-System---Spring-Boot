@@ -1,5 +1,8 @@
 package com.mrs.enpoint.feature.auth.dto;
 
+import java.time.LocalDateTime;
+
+import com.mrs.enpoint.feature.auth.enums.Gender;
 import com.mrs.enpoint.feature.auth.enums.RoleType;
 
 public class UserResponseDTO {
@@ -9,10 +12,20 @@ public class UserResponseDTO {
 	private String email;
 	private String mobileNumber;
 	private RoleType role;
+	private Gender gender;
+	private LocalDateTime created_at;
 	private String status;
 
 	public int getUserId() {
 		return userId;
+	}
+
+	public LocalDateTime getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(LocalDateTime created_at) {
+		this.created_at = created_at;
 	}
 
 	public void setUserId(int userId) {
@@ -49,6 +62,14 @@ public class UserResponseDTO {
 
 	public void setRole(RoleType role) {
 		this.role = role;
+	}
+	
+	public Gender getGender() {
+		return gender;
+	}
+	
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 
 	public String getStatus() {

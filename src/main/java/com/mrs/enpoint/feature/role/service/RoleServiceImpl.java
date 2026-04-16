@@ -2,6 +2,7 @@ package com.mrs.enpoint.feature.role.service;
 
 import com.mrs.enpoint.entity.Role;
 import com.mrs.enpoint.feature.auth.repository.RoleRepository;
+import com.mrs.enpoint.feature.role.dto.RoleCountDTO;
 import com.mrs.enpoint.feature.role.dto.RoleResponseDTO;
 import com.mrs.enpoint.feature.role.mapper.RoleMapper;
 import com.mrs.enpoint.shared.exception.NotFoundException;
@@ -43,4 +44,23 @@ public class RoleServiceImpl implements RoleService {
 
 		return RoleMapper.toResponseDTO(role);
 	}
+
+	@Override
+	@PreAuthorize("hasRole('ADMIN')")
+    public List<RoleCountDTO> getRoleCounts() {
+
+        List<Object[]> results = roleRepository.getRoleCountsRaw();
+
+        if (results.isEmpty()) {
+            throw new NotFoundException("No role count data found");
+        }
+
+        return results.stream()
+                .map(obj -> new RoleCountDTO(
+                        (String) obj[0],
+                        ((Number) obj[1]).longValue()   
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

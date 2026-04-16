@@ -6,7 +6,7 @@ import com.mrs.enpoint.feature.auth.dto.UserResponseDTO;
 public class UserMapper {
 
 	private UserMapper() {
-		
+		 
 	}
 	
     public static UserResponseDTO toResponseDTO(User user) {
@@ -18,6 +18,8 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setMobileNumber(user.getMobileNumber());
         dto.setRole(user.getRole().getRoleName());
+        dto.setGender(user.getGender());
+        dto.setCreated_at(user.getCreatedAt());
         dto.setStatus(user.getStatus().name());
 
         return dto;

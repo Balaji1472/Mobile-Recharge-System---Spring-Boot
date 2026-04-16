@@ -132,4 +132,12 @@ public class OperatorServiceImpl implements OperatorService {
 				Status.ACTIVE.toString(), Status.INACTIVE.toString());
 	}
 
+	@Override
+	public List<OperatorResponseDTO> getActiveOperators() {
+	    return operatorRepository.findByStatus(Status.ACTIVE)
+	        .stream()
+	        .map(operator -> OperatorMapper.toResponseDTO(operator))
+	        .collect(Collectors.toList());
+	}
+
 }

@@ -25,6 +25,9 @@ public class Operator {
 	
 	@OneToMany(mappedBy = "operator", fetch = FetchType.LAZY)
     private List<Plan> plans;
+	
+	@Transient // This prevents JPA from looking for a 'total_plans' column
+    private int totalPlans;
 
 	public Operator() {
 	}
@@ -73,6 +76,15 @@ public class Operator {
 	public void setPlans(List<Plan> plans) {
 		this.plans = plans;
 	}
-	
+
+    // Getter for totalPlans should calculate based on the plans list
+    public int getTotalPlans() {
+        return (plans != null) ? plans.size() : 0;
+    }
+
+	public void setTotalPlans(int totalPlans) {
+		this.totalPlans = totalPlans;
+	}
+    
 	
 }

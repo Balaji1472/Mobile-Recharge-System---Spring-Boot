@@ -185,15 +185,15 @@ public class AuthServiceImpl implements AuthService {
 
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
 
-		// check mobile conflict only if it changed
-		if (!user.getMobileNumber().equals(request.getMobileNumber())
-				&& userRepository.existsByMobileNumber(request.getMobileNumber())) {
-			throw new DuplicateAlreadyExistsException("Mobile number already in use");
-		}
+//		// check mobile conflict only if it changed
+//		if (!user.getMobileNumber().equals(request.getMobileNumber())
+//				&& userRepository.existsByMobileNumber(request.getMobileNumber())) {
+//			throw new DuplicateAlreadyExistsException("Mobile number already in use");
+//		}
 
 		user.setFullName(request.getFullName());
 		user.setGender(request.getGender());
-		user.setMobileNumber(request.getMobileNumber());
+//		user.setMobileNumber(request.getMobileNumber());
 
 		return UserMapper.toResponseDTO(userRepository.save(user));
 	}

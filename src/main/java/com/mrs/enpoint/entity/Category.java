@@ -21,6 +21,9 @@ public class Category {
 	@Column(name = "display_name", nullable = false)
 	private String displayName;
 
+	@Transient 
+    private long totalPlans;
+	
 	@Column(name = "is_active")
 	private Boolean isActive = true;
 	
