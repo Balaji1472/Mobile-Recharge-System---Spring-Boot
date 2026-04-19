@@ -48,10 +48,10 @@ public class PlanOfferServiceImpl implements PlanOfferService {
 			throw new NotFoundException("Plan not found with id: " + planId);
 		}
 		
-		if(planOfferRepository.findByPlan_PlanId(planId).isEmpty()) {
-			throw new NotFoundException("No Offers are available for this planId: "+planId);
-		}
-		
+//		if(planOfferRepository.findByPlan_PlanId(planId).isEmpty()) {
+//			throw new NotFoundException("No Offers are available for this planId: "+planId);
+//		}
+//		
 		return planOfferRepository.findByPlan_PlanId(planId).stream().map(planOffer -> PlanOfferMapper.toResponseDTO(planOffer))
 				.collect(Collectors.toList());
 	}

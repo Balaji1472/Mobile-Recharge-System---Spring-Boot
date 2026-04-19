@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +38,21 @@ public class OfferController {
 
 	// get all
 	@GetMapping
-	public ResponseEntity<List<OfferResponseDTO>> getAllOffers() {
-		return ResponseEntity.ok(offerService.getAllOffers());
+	public ResponseEntity<List<OfferResponseDTO>> getOffers(Authentication authentication) {
+	    // Check if the user has Admin role
+		boolean isAdmin = false;
+	    
+	    if (authentication != null && authentication.isAuthenticated()) {
+	        isAdmin = authentication.getAuthorities().stream()
+	                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+	    }
+
+	    // Logic: Only Admin see all. Everyone else (Users & Guests) sees Active only.
+	    if (isAdmin) {
+	        return ResponseEntity.ok(offerService.getAllOffers());
+	    } else {
+	        return ResponseEntity.ok(offerService.getActiveOffers());
+	    }
 	}
 
 	// get by id

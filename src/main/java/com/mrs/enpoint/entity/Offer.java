@@ -24,7 +24,6 @@ public class Offer {
     @Column(name="discount_type")
     private DiscountType discountType;
 
-    @NotBlank
     @Column(name="discount_value")
     private BigDecimal discountValue;
 

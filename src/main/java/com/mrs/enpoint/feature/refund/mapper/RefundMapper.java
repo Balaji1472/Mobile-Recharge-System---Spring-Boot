@@ -14,6 +14,7 @@ public class RefundMapper {
 		dto.setPaymentId(refund.getPayment().getPaymentId());
 		dto.setRechargeId(refund.getPayment().getRechargeTransaction().getRechargeId());
 		dto.setUserId(refund.getPayment().getRechargeTransaction().getUser().getUserId());
+		dto.setFullName(refund.getPayment().getRechargeTransaction().getUser().getFullName());
 		dto.setMobileNumber(refund.getPayment().getRechargeTransaction().getConnection().getMobileNumber());
 		dto.setPlanName(refund.getPayment().getRechargeTransaction().getPlan().getPlanName());
 		dto.setPaymentMethod(refund.getPayment().getPaymentMethod());

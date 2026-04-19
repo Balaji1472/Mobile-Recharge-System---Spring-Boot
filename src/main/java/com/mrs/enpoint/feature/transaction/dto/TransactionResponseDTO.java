@@ -12,6 +12,7 @@ public class TransactionResponseDTO {
     // --- Recharge side ---
     private int rechargeId;
     private int userId;
+    private String fullName;
     private int connectionId;
     private String mobileNumber;   // the recharged SIM
     private boolean isOwnNumber;   // true = user's own registered mobile
@@ -45,6 +46,14 @@ public class TransactionResponseDTO {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+    
+    public String getFullName() {
+    	return fullName;
+    }
+    
+    public void setFullName(String fullName) {
+    	this.fullName = fullName;
     }
 
     public int getConnectionId() {

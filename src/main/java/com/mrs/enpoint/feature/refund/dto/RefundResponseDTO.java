@@ -12,6 +12,7 @@ public class RefundResponseDTO {
     private int paymentId;
     private int rechargeId;
     private int userId;
+    private String fullName;
     private String mobileNumber;        
     private String planName;
     private PaymentMethod paymentMethod;
@@ -49,6 +50,14 @@ public class RefundResponseDTO {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+    
+    public String getFullName() {
+    	return fullName;
+    }
+    
+    public void setFullName(String fullName) {
+    	this.fullName = fullName;
     }
 
     public String getMobileNumber() {

@@ -22,6 +22,7 @@ public class TransactionMapper {
 		// Recharge side
 		dto.setRechargeId(recharge.getRechargeId());
 		dto.setUserId(recharge.getUser().getUserId());
+		dto.setFullName(recharge.getUser().getFullName());
 		dto.setConnectionId(recharge.getConnection().getConnectionId());
 		dto.setMobileNumber(recharge.getConnection().getMobileNumber());
 		dto.setOwnNumber(recharge.getConnection().getMobileNumber().equals(userMobile));

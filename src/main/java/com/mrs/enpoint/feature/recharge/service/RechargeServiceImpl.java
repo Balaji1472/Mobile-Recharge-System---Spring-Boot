@@ -1,6 +1,8 @@
 package com.mrs.enpoint.feature.recharge.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -11,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mrs.enpoint.entity.MobileConnection;
+import com.mrs.enpoint.entity.Offer;
 import com.mrs.enpoint.entity.Payment;
 import com.mrs.enpoint.entity.Plan;
+import com.mrs.enpoint.entity.PlanOffer;
 import com.mrs.enpoint.entity.RechargeTransaction;
 import com.mrs.enpoint.entity.User;
 import com.mrs.enpoint.feature.auditlog.enums.AuditAction;
@@ -21,9 +25,13 @@ import com.mrs.enpoint.feature.auditlog.service.AuditService;
 import com.mrs.enpoint.feature.auth.repository.UserRepository;
 import com.mrs.enpoint.feature.invoice.service.InvoiceService;
 import com.mrs.enpoint.feature.notification.service.NotificationService;
+import com.mrs.enpoint.feature.offer.enums.DiscountType;
 import com.mrs.enpoint.feature.payment.enums.PaymentStatus;
 import com.mrs.enpoint.feature.payment.repository.PaymentRepository;
+import com.mrs.enpoint.feature.plan.dto.PlanResponseDTO;
+import com.mrs.enpoint.feature.plan.mapper.PlanMapper;
 import com.mrs.enpoint.feature.plan.repository.PlanRepository;
+import com.mrs.enpoint.feature.planoffer.repository.PlanOfferRepository;
 import com.mrs.enpoint.feature.recharge.dto.RechargeRequestDTO;
 import com.mrs.enpoint.feature.recharge.dto.RechargeResponseDTO;
 import com.mrs.enpoint.feature.recharge.enums.ConnectionStatus;
@@ -41,6 +49,7 @@ public class RechargeServiceImpl implements RechargeService {
 	private final RechargeTransactionRepository rechargeRepository;
 	private final MobileConnectionRepository connectionRepository;
 	private final PlanRepository planRepository;
+	private final PlanOfferRepository planOfferRepository;
 	private final PaymentRepository paymentRepository;
 	private final UserRepository userRepository;
 	private final AuditService auditService;
@@ -50,11 +59,13 @@ public class RechargeServiceImpl implements RechargeService {
 
 	public RechargeServiceImpl(RechargeTransactionRepository rechargeRepository,
 			MobileConnectionRepository connectionRepository, PlanRepository planRepository,
-			PaymentRepository paymentRepository, UserRepository userRepository, AuditService auditService,
-			SecurityUtils securityUtils, NotificationService notificationService, InvoiceService invoiceService) {
+			PlanOfferRepository planOfferRepository, PaymentRepository paymentRepository, UserRepository userRepository,
+			AuditService auditService, SecurityUtils securityUtils, NotificationService notificationService,
+			InvoiceService invoiceService) {
 		this.rechargeRepository = rechargeRepository;
 		this.connectionRepository = connectionRepository;
 		this.planRepository = planRepository;
+		this.planOfferRepository = planOfferRepository;
 		this.paymentRepository = paymentRepository;
 		this.userRepository = userRepository;
 		this.auditService = auditService;
@@ -96,13 +107,47 @@ public class RechargeServiceImpl implements RechargeService {
 					+ plan.getOperator().getOperatorName() + " but the connection belongs to "
 					+ connection.getOperator().getOperatorName() + ". Please choose a plan from the correct operator.");
 		}
-
+		
+		BigDecimal basePrice = plan.getPrice();
+		BigDecimal finalAmount = BigDecimal.ZERO;
+		String appliedOfferName = "None";
+		
+		//fetch offer for this plan, if available
+		List<PlanOffer> planOffers = planOfferRepository.findByPlan_PlanId(plan.getPlanId());
+		
+		if(!planOffers.isEmpty()) {
+			//pick the offer with highest priority
+			PlanOffer bestOffer = planOffers.stream()
+				    .min(Comparator.comparingInt(p -> p.getPriority()))
+				    .orElse(null);
+	
+			if(bestOffer != null) {
+				Offer offer = bestOffer.getOffer();
+				// calculate discount properly with two diff types
+				appliedOfferName = offer.getTitle();
+	            BigDecimal discountValue = offer.getDiscountValue();
+	            
+	            if(offer.getDiscountType() == DiscountType.PERCENTAGE) {
+	            	BigDecimal discountAmount = basePrice.multiply(discountValue).divide(BigDecimal.valueOf(100));
+	            	finalAmount = basePrice.subtract(discountAmount);
+	            }
+	            else if(offer.getDiscountType() == DiscountType.FLAT) {
+	            	finalAmount = basePrice.subtract(discountValue);
+	            }
+	            
+	            // final price doesn't go below zero
+	            if (finalAmount.compareTo(BigDecimal.ZERO) < 0) {
+	                finalAmount = BigDecimal.ZERO;
+	            }
+			}
+		}
+		
 		// build recharge transaction with PENDING status
 		RechargeTransaction recharge = new RechargeTransaction();
 		recharge.setUser(user);
 		recharge.setConnection(connection);
 		recharge.setPlan(plan);
-		recharge.setFinalAmount(plan.getPrice());
+		recharge.setFinalAmount(finalAmount);
 		recharge.setStatus(RechargeStatus.PENDING);
 		recharge.setInitiatedAt(LocalDateTime.now());
 
@@ -162,7 +207,30 @@ public class RechargeServiceImpl implements RechargeService {
 					plan.getPrice().toPlainString());
 		}
 
-		return RechargeMapper.toResponseDTO(savedRecharge, user.getMobileNumber());
+		return RechargeMapper.toResponseDTO(savedRecharge, user.getMobileNumber(), appliedOfferName);
+	}
+
+	@Override
+	@PreAuthorize("hasRole('USER')")
+	public List<PlanResponseDTO> getPlansForMobileNumber(String mobileNumber) {
+
+		MobileConnection conn = connectionRepository.findByMobileNumber(mobileNumber)
+				.orElseThrow(() -> new NotFoundException("No connection found for mobile number: " + mobileNumber));
+
+		if (conn.getStatus() != ConnectionStatus.ACTIVE) {
+			throw new BusinessException("The connection for " + mobileNumber + " is currently inactive.");
+		}
+
+		int operatorId = conn.getOperator().getOperatorId();
+
+		List<Plan> plans = planRepository.findByOperator_OperatorId(operatorId);
+
+		if (plans.isEmpty()) {
+			throw new NotFoundException("No active plans found for operator: " + conn.getOperator().getOperatorName());
+		}
+
+		return plans.stream().filter(plan -> plan.getIsActive()).map(plan -> PlanMapper.toResponseDTO(plan))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -182,7 +250,7 @@ public class RechargeServiceImpl implements RechargeService {
 		User user = userRepository.findById(recharge.getUser().getUserId())
 				.orElseThrow(() -> new NotFoundException("User not found"));
 
-		return RechargeMapper.toResponseDTO(recharge, user.getMobileNumber());
+		return RechargeMapper.toResponseDTO(recharge, user.getMobileNumber(), "");
 	}
 
 	@Override
@@ -200,7 +268,7 @@ public class RechargeServiceImpl implements RechargeService {
 			throw new NotFoundException("No recharges found for your account");
 		}
 
-		return recharges.stream().map(recharge -> RechargeMapper.toResponseDTO(recharge, user.getMobileNumber()))
+		return recharges.stream().map(recharge -> RechargeMapper.toResponseDTO(recharge, user.getMobileNumber(), ""))
 				.collect(Collectors.toList());
 	}
 

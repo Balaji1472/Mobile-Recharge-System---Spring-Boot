@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mrs.enpoint.feature.plan.dto.PlanResponseDTO;
 import com.mrs.enpoint.feature.recharge.dto.RechargeRequestDTO;
 import com.mrs.enpoint.feature.recharge.dto.RechargeResponseDTO;
 import com.mrs.enpoint.feature.recharge.service.RechargeService;
@@ -31,6 +32,12 @@ public class RechargeController {
 	@PostMapping
 	public ResponseEntity<RechargeResponseDTO> initiateRecharge(@Valid @RequestBody RechargeRequestDTO request) {
 		return new ResponseEntity<>(rechargeService.initiateRecharge(request), HttpStatus.CREATED);
+	}
+	
+	//get
+	@GetMapping("/lookup/{mobileNumber}")
+	public ResponseEntity<List<PlanResponseDTO>> getAvailablePlans(@PathVariable String mobileNumber) {
+	    return ResponseEntity.ok(rechargeService.getPlansForMobileNumber(mobileNumber));
 	}
 	
 	// get users recharge

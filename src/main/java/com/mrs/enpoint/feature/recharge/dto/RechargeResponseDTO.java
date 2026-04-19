@@ -16,6 +16,7 @@ public class RechargeResponseDTO {
     private String planName;
     private BigDecimal finalAmount;
     private RechargeStatus status;
+    private String appliedOfferName;
     private LocalDateTime initiatedAt;
     private LocalDateTime completedAt;
 
@@ -59,7 +60,15 @@ public class RechargeResponseDTO {
         isOwnNumber = ownNumber;
     }
 
-    public int getPlanId() {
+    public String getAppliedOfferName() {
+		return appliedOfferName;
+	}
+
+	public void setAppliedOfferName(String appliedOfferName) {
+		this.appliedOfferName = appliedOfferName;
+	}
+
+	public int getPlanId() {
         return planId;
     }
 
