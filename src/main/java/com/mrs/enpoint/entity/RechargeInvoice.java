@@ -13,7 +13,6 @@ public class RechargeInvoice {
     @Column(name = "invoice_id")
     private int invoiceId;
 
-    // One invoice per recharge
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recharge_id", nullable = false, unique = true)
     private RechargeTransaction rechargeTransaction;
