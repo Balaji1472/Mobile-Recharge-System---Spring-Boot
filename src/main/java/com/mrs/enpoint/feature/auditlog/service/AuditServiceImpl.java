@@ -1,9 +1,11 @@
 package com.mrs.enpoint.feature.auditlog.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+//import java.util.List;
+//import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -40,12 +42,12 @@ public class AuditServiceImpl implements AuditService {
 		auditLogRepository.save(log);
 
 	}
-
+	
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public List<AuditResponseDTO> getAllLogs() {
-		return auditLogRepository.findAll().stream().map(audit -> AuditMapper.toResponseDTO(audit))
-				.collect(Collectors.toList());
+	public Page<AuditResponseDTO> getAllLogs(Pageable pageable) {
+	    return auditLogRepository.findAll(pageable)
+	            .map(audit -> AuditMapper.toResponseDTO(audit));
 	}
 
 	@Override

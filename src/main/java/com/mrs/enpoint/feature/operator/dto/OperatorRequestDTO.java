@@ -12,19 +12,19 @@ public class OperatorRequestDTO {
 	
 	@NotNull(message="operator status is required('ACTIVE', 'INACTIVE')")
 	private Status status;
-
+	
 	public String getOperatorName() {
 		return operatorName;
 	}
-
+	
 	public void setOperatorName(String operatorName) {
 		this.operatorName = operatorName;
 	}
-
+	
 	public Status getStatus() {
 		return status;
 	}
-
+	
 	public void setStatus(Status status) {
 		this.status = status;
 	}

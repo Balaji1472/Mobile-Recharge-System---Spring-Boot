@@ -1,70 +1,3 @@
-//package com.mrs.enpoint.shared.config;
-//
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.http.HttpMethod;
-//import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-////import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//
-//import com.mrs.enpoint.shared.security.JwtAuthFilter;
-//
-//@Configuration
-//@EnableWebSecurity
-//@EnableMethodSecurity
-//public class SecurityConfig {
-//
-//	private final JwtAuthFilter jwtAuthFilter;
-//
-//	public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
-//		this.jwtAuthFilter = jwtAuthFilter;
-//	}
-//
-//	@Bean
-//	PasswordEncoder passwordEncoder() {
-//		return new BCryptPasswordEncoder();
-//	}
-//
-//	@Bean
-//	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
-//
-//				.requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout").permitAll()
-//
-//				.requestMatchers(HttpMethod.GET, "/plans/**", "/offers/**", "/operators/**", "/categories/**")
-//				.permitAll()
-//
-//				.requestMatchers("/recharges/**").authenticated()
-//
-//				.requestMatchers("/payments/**").authenticated()
-//
-//				.requestMatchers("/transactions/**").authenticated()
-//
-//				.requestMatchers("/notifications/**").authenticated()
-//
-//				.requestMatchers("/invoices/**").authenticated()
-//
-//				.requestMatchers("/saved-numbers/**").authenticated()
-//
-//				.requestMatchers("/refunds/**").authenticated()
-//
-//				.requestMatchers("/roles/**").authenticated()
-//
-//				.requestMatchers("/analytics/**").authenticated()
-//
-//				.anyRequest().authenticated())
-//				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//		return http.build();
-//	}
-//}
-
-
 package com.mrs.enpoint.shared.config;
 
 import java.util.List;
@@ -86,6 +19,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mrs.enpoint.shared.security.JwtAuthFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -97,39 +32,24 @@ public class SecurityConfig {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
-    // ✅ Password Encoder
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Main Security Config
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
             .csrf(csrf -> csrf.disable())
-
-            // ✅ Enable CORS (CRITICAL)
             .cors(cors -> {})
-
-            // ✅ Stateless (for JWT)
-            .sessionManagement(session -> 
+            .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-
             .authorizeHttpRequests(auth -> auth
-
-                // ✅ Allow preflight requests
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                // ✅ Public Auth APIs
-                .requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout").permitAll()
-
-                // ✅ Public GET APIs
-                .requestMatchers(HttpMethod.GET, "/plans/**", "/offers/**", "/operators/**", "/categories/**").permitAll()
-
-                // ✅ Protected APIs
+                .requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout", "/auth/forgot-password/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/plans/**", "/offers/**", "/operators/**", "/categories/**", "/recharges/lookup/{mobileNumber}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/recharges/validate-quick-recharge").permitAll()
                 .requestMatchers("/recharges/**").authenticated()
                 .requestMatchers("/payments/**").authenticated()
                 .requestMatchers("/transactions/**").authenticated()
@@ -139,31 +59,30 @@ public class SecurityConfig {
                 .requestMatchers("/refunds/**").authenticated()
                 .requestMatchers("/roles/**").authenticated()
                 .requestMatchers("/analytics/**").authenticated()
-
-                // ✅ Everything else secured
+                .requestMatchers("/payments/confirm").authenticated()
                 .anyRequest().authenticated()
             )
-
-            // ✅ JWT filter
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                })
+            )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ✅ GLOBAL CORS CONFIG (REAL FIX)
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-
         CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // frontend
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
         return source;
     }
 }

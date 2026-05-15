@@ -80,10 +80,6 @@ public class NotificationServiceImpl implements NotificationService {
 
 		List<Notification> unread = notificationRepository.findByUser_UserIdAndReadStatusFalse(currentUserId);
 
-		if (unread.isEmpty()) {
-			throw new NotFoundException("No unread notifications found");
-		}
-
 		return unread.stream().map(notify -> NotificationMapper.toResponseDTO(notify)).collect(Collectors.toList());
 	}
 
@@ -94,10 +90,6 @@ public class NotificationServiceImpl implements NotificationService {
 		int currentUserId = securityUtils.getCurrentUserId();
 
 		List<Notification> read = notificationRepository.findByUser_UserIdAndReadStatusTrue(currentUserId);
-
-		if (read.isEmpty()) {
-			throw new NotFoundException("No read notifications found");
-		}
 
 		return read.stream().map(notify -> NotificationMapper.toResponseDTO(notify)).collect(Collectors.toList());
 	}
@@ -112,7 +104,6 @@ public class NotificationServiceImpl implements NotificationService {
 		Notification notification = notificationRepository.findById(notificationId)
 				.orElseThrow(() -> new NotFoundException("Notification not found with id: " + notificationId));
 
-		// User can only mark their own notification
 		if (notification.getUser().getUserId() != currentUserId) {
 			throw new AccessDeniedException("You are not authorized to update this notification");
 		}
@@ -133,10 +124,6 @@ public class NotificationServiceImpl implements NotificationService {
 		int currentUserId = securityUtils.getCurrentUserId();
 
 		List<Notification> unread = notificationRepository.findByUser_UserIdAndReadStatusFalse(currentUserId);
-
-		if (unread.isEmpty()) {
-			throw new NotFoundException("No unread notifications to mark as read");
-		}
 
 		unread.forEach(n -> n.setReadStatus(true));
 		notificationRepository.saveAll(unread);

@@ -14,7 +14,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
 	Optional<Category> findByCategoryCode(String categoryCode);
 
-	// FETCH JOIN ensures category.getPlans() is populated in a single database hit
 	@Query("""
 			    SELECT DISTINCT c
 			    FROM Category c

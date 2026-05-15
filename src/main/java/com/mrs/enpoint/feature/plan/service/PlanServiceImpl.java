@@ -122,7 +122,6 @@ public class PlanServiceImpl implements PlanService {
 		Plan existing = planRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Plan not found with id: " + id));
 
-		// If plan name changed, check for duplicate under the same operator
 		String planName = request.getPlanName().trim();
 		if (!existing.getPlanName().equals(planName) && planRepository
 				.existsByOperator_OperatorIdAndPlanName(existing.getOperator().getOperatorId(), planName)) {
@@ -145,7 +144,6 @@ public class PlanServiceImpl implements PlanService {
 
 		Plan saved = planRepository.save(existing);
 
-		// Check if price changed — log UPDATE_PRICE separately
 		if (!oldValue.contains("price=" + saved.getPrice())) {
 			auditService.log(securityUtils.getCurrentUserId(), EntityName.PLAN, saved.getPlanId(),
 					AuditAction.UPDATE_PRICE, oldValue, "price=" + saved.getPrice());
@@ -181,7 +179,6 @@ public class PlanServiceImpl implements PlanService {
 				"false");
 	}
 
-	// helper method
 	private void validatePlanRequest(PlanRequestDTO request) {
 		if (request.getPlanName() == null || request.getPlanName().trim().isEmpty()) {
 			throw new BusinessException("Plan name must not be blank");

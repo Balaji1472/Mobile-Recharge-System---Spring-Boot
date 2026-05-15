@@ -16,42 +16,50 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-	private final JwtUtil jwtUtil;
-	private final RevokedTokenRepository revokedTokenRepository;
-	
-	public JwtAuthFilter(JwtUtil jwtUtil, RevokedTokenRepository revokedTokenRepository) {
-		this.jwtUtil = jwtUtil;
-		this.revokedTokenRepository = revokedTokenRepository;
-	}
+    private final JwtUtil jwtUtil;
+    private final RevokedTokenRepository revokedTokenRepository;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
-		String authHeader = request.getHeader("Authorization");
-		
-		if(authHeader != null && authHeader.startsWith("Bearer ")) {
-			String token = authHeader.substring(7);
-			
-			boolean isRevoked = revokedTokenRepository.existsByToken(token);
-			
-			if(jwtUtil.isTokenValid(token) && !isRevoked) {
-				String email = jwtUtil.extractEmail(token);
-				String role = jwtUtil.extractRole(token);
-				
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						email, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
-				
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			}
-		}
-		
-		filterChain.doFilter(request, response);
-	}
-	
+    public JwtAuthFilter(JwtUtil jwtUtil, RevokedTokenRepository revokedTokenRepository) {
+        this.jwtUtil = jwtUtil;
+        this.revokedTokenRepository = revokedTokenRepository;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+
+            boolean isRevoked = revokedTokenRepository.existsByToken(token);
+            if (isRevoked) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token has been revoked\"}");
+                return;
+            }
+
+            if (!jwtUtil.isTokenValid(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token expired or invalid\"}");
+                return;
+            }
+
+            String email = jwtUtil.extractEmail(token);
+            String role = jwtUtil.extractRole(token);
+
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    email, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+
+        filterChain.doFilter(request, response);
+    }
 }
-	

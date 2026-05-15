@@ -14,19 +14,15 @@ import java.util.Optional;
 
 public interface OfferRepository extends JpaRepository<Offer, Integer> {
  
-    // Get active & valid offers
     List<Offer> findByIsActiveTrueAndStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate currentDate1,
 			LocalDate currentDate2);
 
-	// Get single active offer
 	Optional<Offer> findByOfferIdAndIsActiveTrue(int offerId);
 
-	// Get only active offers
 	List<Offer> findByIsActiveTrue();
 	
 	boolean existsByTitle(String operatorName);
 
-	// Deactivate expired offers
 	@Modifying
 	@Transactional
 	@Query("UPDATE Offer o SET o.isActive = false WHERE o.endDate < CURRENT_DATE AND o.isActive = true")

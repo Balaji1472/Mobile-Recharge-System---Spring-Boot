@@ -29,14 +29,12 @@ public class OfferController {
 		this.offerService = offerService;
 	}
 
-	// create
 	@PostMapping
 	public ResponseEntity<OfferResponseDTO> createOffer(@Valid @RequestBody OfferRequestDTO request) {
 		OfferResponseDTO response = offerService.createOffer(request);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
-	// get all
 	@GetMapping
 	public ResponseEntity<List<OfferResponseDTO>> getOffers(Authentication authentication) {
 	    // Check if the user has Admin role
@@ -55,34 +53,29 @@ public class OfferController {
 	    }
 	}
 
-	// get by id
 	@GetMapping("/{id}")
 	public ResponseEntity<OfferResponseDTO> getOfferById(@PathVariable int id) {
 		return ResponseEntity.ok(offerService.getOfferById(id));
 	}
 
-	// update offer
 	@PutMapping("/{id}")
 	public ResponseEntity<OfferResponseDTO> updateOffer(@Valid @PathVariable int id, @RequestBody OfferRequestDTO request) {
 
 		return ResponseEntity.ok(offerService.updateOffer(id, request));
 	}
 
-	// deactivate
 	@PutMapping("/{id}/deactivate")
 	public ResponseEntity<String> deactivate(@PathVariable int id) {
 		offerService.deactivate(id);
 		return ResponseEntity.ok("Offer deactivated successfully");
 	}
  
-	// activate
 	@PutMapping("/{id}/activate")
 	public ResponseEntity<String> activate(@PathVariable int id) {
 		offerService.activate(id);
 		return ResponseEntity.ok("Offer activated successfully");
 	}
 
-	// end offer
 	@PutMapping("/{id}/end")
 	public ResponseEntity<String> endOffer(@PathVariable int id) {
 		offerService.deactivate(id); 

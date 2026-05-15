@@ -59,7 +59,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 		RechargeInvoice invoice = invoiceRepository.findById(invoiceId)
 				.orElseThrow(() -> new NotFoundException("Invoice not found with id: " + invoiceId));
 
-		// USER can only view their own invoices
 		boolean isAdmin = isCurrentUserAdmin();
 		if (!isAdmin && invoice.getRechargeTransaction().getUser().getUserId() != currentUserId) {
 			throw new AccessDeniedException("You are not authorized to view this invoice");
@@ -97,7 +96,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 		RechargeInvoice invoice = invoiceRepository.findByRechargeTransaction_RechargeId(rechargeId)
 				.orElseThrow(() -> new NotFoundException("Invoice not found for recharge id: " + rechargeId));
 
-		// USER can only view their own invoices
 		boolean isAdmin = isCurrentUserAdmin();
 		if (!isAdmin && invoice.getRechargeTransaction().getUser().getUserId() != currentUserId) {
 			throw new AccessDeniedException("You are not authorized to view this invoice");
@@ -108,7 +106,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 		return InvoiceMapper.toResponseDTO(invoice, payment);
 	}
 
-	// ─── Helpers ─────────────────────────────────────────────────────────────
 
 	private Payment resolveLatestPayment(int rechargeId) {
 		return paymentRepository.findTopByRechargeTransaction_RechargeIdOrderByAttemptNumberDesc(rechargeId)

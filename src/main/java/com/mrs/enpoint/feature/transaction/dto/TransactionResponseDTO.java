@@ -9,13 +9,12 @@ import java.time.LocalDateTime;
 
 public class TransactionResponseDTO {
 
-    // --- Recharge side ---
     private int rechargeId;
     private int userId;
     private String fullName;
     private int connectionId;
-    private String mobileNumber;   // the recharged SIM
-    private boolean isOwnNumber;   // true = user's own registered mobile
+    private String mobileNumber;   
+    private boolean isOwnNumber;   
     private int planId;
     private String planName;
     private BigDecimal finalAmount;
@@ -23,7 +22,6 @@ public class TransactionResponseDTO {
     private LocalDateTime initiatedAt;
     private LocalDateTime completedAt;
 
-    // --- Payment side ---
     private int paymentId;
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;

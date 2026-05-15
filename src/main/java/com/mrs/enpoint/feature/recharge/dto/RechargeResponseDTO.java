@@ -10,8 +10,8 @@ public class RechargeResponseDTO {
     private int rechargeId;
     private int userId;
     private int connectionId;
-    private String mobileNumber;   // the recharged SIM number
-    private boolean isOwnNumber;   // true = user's own registered mobile, false = recharged for someone else
+    private String mobileNumber;   
+    private boolean isOwnNumber;   
     private int planId;
     private String planName;
     private BigDecimal finalAmount;
@@ -19,6 +19,7 @@ public class RechargeResponseDTO {
     private String appliedOfferName;
     private LocalDateTime initiatedAt;
     private LocalDateTime completedAt;
+    private String razorpayOrderId;
 
     public int getRechargeId() {
         return rechargeId;
@@ -115,4 +116,13 @@ public class RechargeResponseDTO {
     public void setCompletedAt(LocalDateTime completedAt) {
         this.completedAt = completedAt;
     }
+
+	public String getRazorpayOrderId() {
+		return razorpayOrderId;
+	}
+
+	public void setRazorpayOrderId(String razorpayOrderId) {
+		this.razorpayOrderId = razorpayOrderId;
+	}
+    
 }

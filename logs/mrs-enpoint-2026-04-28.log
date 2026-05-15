@@ -1,0 +1,178 @@
+2026-04-28 09:24:48 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:24:48 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:24:55 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:25:05 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:25:05 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 425cb6b5-e4bc-48a0-ae96-2c3a462e25fb
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:25:06 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 18.739 seconds (process running for 19.617)
+2026-04-28 09:25:50 [http-nio-8086-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:26:04 [http-nio-8086-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:26:39 [http-nio-8086-exec-4] INFO  c.m.e.f.r.s.RechargeServiceImpl - Initiating recharge userId=2 connectionId=2 planId=6
+2026-04-28 09:26:40 [http-nio-8086-exec-4] INFO  c.m.e.f.r.s.RechargeServiceImpl - Razorpay order created orderId='order_Silw2Xp4nh8hDW' rechargeId=29 amount=199.00
+2026-04-28 09:26:40 [http-nio-8086-exec-4] INFO  c.m.e.f.r.s.RechargeServiceImpl - Recharge pending rechargeId=29 mobile='9442541758' amount=199.00 orderId='order_Silw2Xp4nh8hDW'
+2026-04-28 09:31:22 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:31:22 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:31:23 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:31:24 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:31:24 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 6bebeccc-2e22-4af5-84e3-291c1eba0409
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:31:24 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 1.988 seconds (process running for 397.922)
+2026-04-28 09:31:36 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:31:36 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:31:36 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:31:37 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:31:37 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: e8605126-8de6-4e55-bb1f-fe771f7bf1d1
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:31:37 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 1.634 seconds (process running for 410.828)
+2026-04-28 09:32:31 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:32:31 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:32:32 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:32:32 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:32:32 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: f5190d42-f55e-4806-afe1-584818b5ded6
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:32:32 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 1.4 seconds (process running for 466.089)
+2026-04-28 09:32:38 [http-nio-8086-exec-3] INFO  c.m.e.f.r.s.RechargeServiceImpl - Initiating recharge userId=2 connectionId=3 planId=1
+2026-04-28 09:32:38 [http-nio-8086-exec-3] DEBUG c.m.e.f.r.s.RechargeServiceImpl - Offer 'Election Offer' applied planId=1 base=239.00 discountType=FLAT final=189.00
+2026-04-28 09:32:39 [http-nio-8086-exec-3] INFO  c.m.e.f.r.s.RechargeServiceImpl - Razorpay order created orderId='order_Sim2MK8IDYybAI' rechargeId=30 amount=189.00
+2026-04-28 09:32:39 [http-nio-8086-exec-3] INFO  c.m.e.f.r.s.RechargeServiceImpl - Recharge pending rechargeId=30 mobile='9489354566' amount=189.00 orderId='order_Sim2MK8IDYybAI'
+2026-04-28 09:35:14 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:35:14 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:35:14 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:35:15 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:35:15 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 88dc744c-0c70-4e60-a400-8581677ec21b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:35:15 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 1.453 seconds (process running for 629.037)
+2026-04-28 09:35:40 [http-nio-8086-exec-4] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:36:02 [http-nio-8086-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:40:17 [http-nio-8086-exec-7] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:41:05 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:41:05 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:41:06 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:41:06 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:41:06 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: bb3fbfd6-fa12-4fe7-a28c-b7da537cd68e
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:41:07 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 1.522 seconds (process running for 980.26)
+2026-04-28 09:41:17 [http-nio-8086-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:43:01 [http-nio-8086-exec-6] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:43:15 [http-nio-8086-exec-8] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:49:00 [http-nio-8086-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:52:23 [http-nio-8086-exec-3] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 09:54:56 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:54:56 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:54:56 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:54:57 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:54:57 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 894d8810-6c97-433e-9629-55596872e3e8
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:54:57 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 1.647 seconds (process running for 1810.905)
+2026-04-28 09:56:30 [http-nio-8086-exec-3] WARN  o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-28 09:57:07 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 17900 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 09:57:07 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 09:57:08 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 09:57:08 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 09:57:08 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 06584a90-6db8-45a7-bfa9-58a280c19d43
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 09:57:08 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 1.285 seconds (process running for 1942.12)
+2026-04-28 10:00:35 [http-nio-8086-exec-8] WARN  c.m.e.f.r.s.RechargeServiceImpl - Quick recharge operator mismatch mobile='9489354599' given='VI' actual='BSNL'
+2026-04-28 10:00:35 [http-nio-8086-exec-8] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.BusinessException: Selected operator does not match the registered operator for this number.]
+2026-04-28 10:00:42 [http-nio-8086-exec-10] WARN  c.m.e.f.r.s.RechargeServiceImpl - Quick recharge operator mismatch mobile='9489354599' given='Jio' actual='BSNL'
+2026-04-28 10:00:42 [http-nio-8086-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.BusinessException: Selected operator does not match the registered operator for this number.]
+2026-04-28 10:00:49 [http-nio-8086-exec-6] INFO  c.m.e.f.r.s.RechargeServiceImpl - Quick recharge validated mobile='9489354599' operator='BSNL'
+2026-04-28 10:00:56 [http-nio-8086-exec-1] INFO  c.m.e.f.r.s.RechargeServiceImpl - Initiating recharge userId=15 connectionId=7 planId=8
+2026-04-28 10:00:56 [http-nio-8086-exec-1] INFO  c.m.e.f.r.s.RechargeServiceImpl - Razorpay order created orderId='order_SimWFcBKP6W1Ny' rechargeId=31 amount=100.00
+2026-04-28 10:00:56 [http-nio-8086-exec-1] INFO  c.m.e.f.r.s.RechargeServiceImpl - Recharge pending rechargeId=31 mobile='9489354599' amount=100.00 orderId='order_SimWFcBKP6W1Ny'
+2026-04-28 10:16:34 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 9180 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 10:16:34 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 10:16:36 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 10:16:39 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 10:16:39 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 8f4aeffb-b48c-48d5-8a63-ad8b535a6d8c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 10:16:39 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 5.628 seconds (process running for 6.185)
+2026-04-28 10:23:37 [http-nio-8086-exec-8] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource recharges/plans/7339041758 for request '/reup/recharges/plans/7339041758'.]
+2026-04-28 10:23:43 [http-nio-8086-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource recharges/plans/7339041758 for request '/reup/recharges/plans/7339041758'.]
+2026-04-28 10:23:49 [http-nio-8086-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource recharges/plans/7339041758 for request '/reup/recharges/plans/7339041758'.]
+2026-04-28 10:36:13 [http-nio-8086-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-28 10:59:21 [http-nio-8086-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `com.mrs.enpoint.feature.payment.enums.PaymentMethod` from String "BANKING": not one of the values accepted for Enum class: [CARD, NETBANKING, UPI]]
+2026-04-28 11:00:02 [http-nio-8086-exec-7] INFO  c.m.e.f.r.s.RechargeServiceImpl - Initiating recharge userId=2 connectionId=9 planId=1
+2026-04-28 11:00:02 [http-nio-8086-exec-7] DEBUG c.m.e.f.r.s.RechargeServiceImpl - Offer 'Election Offer' applied planId=1 base=239.00 discountType=FLAT final=189.00
+2026-04-28 11:00:03 [http-nio-8086-exec-7] INFO  c.m.e.f.r.s.RechargeServiceImpl - Razorpay order created orderId='order_SinWgct68VCodu' rechargeId=32 amount=189.00
+2026-04-28 11:00:03 [http-nio-8086-exec-7] INFO  c.m.e.f.r.s.RechargeServiceImpl - Recharge pending rechargeId=32 mobile='9894388915' amount=189.00 orderId='order_SinWgct68VCodu'
+2026-04-28 11:39:40 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=28m2s395ms619µs100ns).
+2026-04-28 13:13:06 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=35m55s813ms802µs200ns).
+2026-04-28 15:11:34 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 12480 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 15:11:34 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 15:11:44 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 15:11:48 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 15:11:48 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 6883d1c4-6833-426a-9446-af7b40d698ac
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 15:11:49 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 15.529 seconds (process running for 16.392)
+2026-04-28 17:00:37 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 18436 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 17:00:37 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 17:00:40 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 17:00:43 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 17:00:44 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 7026eec9-9a18-40b7-b92a-42c186c26182
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 17:00:44 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 7.173 seconds (process running for 7.938)
+2026-04-28 17:01:07 [http-nio-8086-exec-3] WARN  o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-28 17:15:21 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m10s474ms908µs200ns).
+2026-04-28 17:27:12 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=6m51s90ms694µs700ns).
+2026-04-28 23:00:17 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 27812 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-28 23:00:17 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-28 23:00:21 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-28 23:00:25 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-28 23:00:25 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: fe80232a-d612-48c3-95ab-4609f98d3a60
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28 23:00:26 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 9.092 seconds (process running for 9.791)

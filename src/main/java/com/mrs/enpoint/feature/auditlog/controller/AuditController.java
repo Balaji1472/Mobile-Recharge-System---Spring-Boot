@@ -1,7 +1,10 @@
 package com.mrs.enpoint.feature.auditlog.controller;
 
-import java.util.List;
+//import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,23 +18,22 @@ import com.mrs.enpoint.feature.auditlog.service.AuditService;
 @RequestMapping("/audit-logs")
 public class AuditController {
 
-
 	private final AuditService auditService;
 
-    public AuditController(AuditService authService) {
-        this.auditService = authService;
-    }
-    
-    //get all
-    @GetMapping
-    public ResponseEntity<List<AuditResponseDTO>> getAllLogs() {
-        return ResponseEntity.ok(auditService.getAllLogs());
-    } 
+	public AuditController(AuditService authService) {
+		this.auditService = authService;
+	}
 
-    //get by id
-    @GetMapping("/{id}")
-    public ResponseEntity<AuditResponseDTO> getLogById(@PathVariable int id) {
-        return ResponseEntity.ok(auditService.getLogById(id));
-    }
-    
+	@GetMapping
+	public ResponseEntity<Page<AuditResponseDTO>> getAllLogs(
+			@PageableDefault(size = 10, sort = "timestamp") Pageable pageable) {
+		return ResponseEntity.ok(auditService.getAllLogs(pageable));
+	}
+
+	// get by id
+	@GetMapping("/{id}")
+	public ResponseEntity<AuditResponseDTO> getLogById(@PathVariable int id) {
+		return ResponseEntity.ok(auditService.getLogById(id));
+	}
+
 }

@@ -70,7 +70,6 @@ public class TransactionServiceImpl implements TransactionService {
 		RechargeTransaction recharge = rechargeRepository.findById(rechargeId)
 				.orElseThrow(() -> new NotFoundException("Transaction not found with recharge id: " + rechargeId));
 
-		// user can only view their own transactions
 		boolean isAdmin = isCurrentUserAdmin();
 		if (isAdmin && recharge.getUser().getUserId() != currentUserId) {
 			throw new AccessDeniedException("You are not authorized to view this transaction");
@@ -110,7 +109,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return responseList;
 	}
 
-	// fetch ltest payment attempt for a give recharge id
 	private Payment resolveLatestPayment(int rechargeId) {
 		return paymentRepository.findTopByRechargeTransaction_RechargeIdOrderByAttemptNumberDesc(rechargeId)
 				.orElseThrow(() -> new NotFoundException("No payment record found for recharge id: " + rechargeId));

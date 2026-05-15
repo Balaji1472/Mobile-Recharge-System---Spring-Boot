@@ -1,0 +1,43 @@
+2026-04-30 00:11:19 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 33520 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-30 00:11:19 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-30 00:11:23 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-30 00:11:27 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-30 00:11:27 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: a2d652c4-2815-4aea-9343-def912a5f6fc
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-30 00:11:28 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 8.592 seconds (process running for 9.351)
+2026-04-30 09:51:16 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Starting MrsEndpointsApplication using Java 21.0.9 with PID 30996 (C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints\target\classes started by Balajivasu in C:\Users\Balajivasu\Documents\workspace-spring-tools-for-eclipse-5.0.1.RELEASE\MRS_endpoints)
+2026-04-30 09:51:16 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-30 09:51:19 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-30 09:51:22 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-30 09:51:22 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 82cc142b-be78-4751-a6a0-d42e43c04424
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-30 09:51:23 [restartedMain] INFO  c.m.enpoint.MrsEndpointsApplication - Started MrsEndpointsApplication in 7.388 seconds (process running for 8.013)
+2026-04-30 09:53:30 [http-nio-8086-exec-5] WARN  o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-04-30 09:54:36 [http-nio-8086-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-30 09:54:51 [http-nio-8086-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-30 10:37:41 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=29m21s656ms909µs400ns).
+2026-04-30 10:43:38 [http-nio-8086-exec-4] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-30 10:50:43 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m1s945ms929µs100ns).
+2026-04-30 12:16:04 [http-nio-8086-exec-6] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-30 12:17:47 [http-nio-8086-exec-3] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.InvalidCredentialsException: Invalid credentials]
+2026-04-30 12:21:01 [http-nio-8086-exec-10] INFO  c.m.e.f.r.s.RechargeServiceImpl - Quick recharge validated mobile='7339041758' operator='Airtel'
+2026-04-30 12:21:16 [http-nio-8086-exec-8] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.NotFoundException: No connection found for mobile number: 7333904175]
+2026-04-30 12:21:32 [http-nio-8086-exec-10] WARN  c.m.e.f.r.s.RechargeServiceImpl - Quick recharge operator mismatch mobile='7339041758' given='Jio' actual='Airtel'
+2026-04-30 12:21:32 [http-nio-8086-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.BusinessException: Selected operator does not match the registered operator for this number.]
+2026-04-30 12:21:40 [http-nio-8086-exec-3] INFO  c.m.e.f.r.s.RechargeServiceImpl - Quick recharge validated mobile='7339041758' operator='Airtel'
+2026-04-30 12:21:54 [http-nio-8086-exec-8] INFO  c.m.e.f.r.s.RechargeServiceImpl - Initiating recharge userId=2 connectionId=1 planId=3
+2026-04-30 12:21:55 [http-nio-8086-exec-8] INFO  c.m.e.f.r.s.RechargeServiceImpl - Razorpay order created orderId='order_SjbzNxKZD0gvIq' rechargeId=38 amount=249.00
+2026-04-30 12:21:55 [http-nio-8086-exec-8] INFO  c.m.e.f.r.s.RechargeServiceImpl - Recharge pending rechargeId=38 mobile='7339041758' amount=249.00 orderId='order_SjbzNxKZD0gvIq'
+2026-04-30 12:27:15 [http-nio-8086-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.BusinessException: Cannot deactivate category. There are active plans linked to this category.]
+2026-04-30 12:29:29 [http-nio-8086-exec-4] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.mrs.enpoint.shared.exception.DuplicateAlreadyExistsException: Operator name already exists]

@@ -44,25 +44,19 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
 		AdminAnalyticsDTO dto = new AdminAnalyticsDTO();
 
-		// Total recharges across platform
 		dto.setTotalRecharges(rechargeRepository.count());
 
-		// Breakdown by status
 		dto.setSuccessfulRecharges(rechargeRepository.countByStatus(RechargeStatus.SUCCESS));
 		dto.setFailedRecharges(rechargeRepository.countByStatus(RechargeStatus.FAILED));
 		dto.setRefundedRecharges(rechargeRepository.countByStatus(RechargeStatus.REFUNDED));
 
-		// Total revenue — sum of final_amount for SUCCESS recharges
 		BigDecimal revenue = rechargeRepository.sumSuccessfulRechargeAmounts();
 		dto.setTotalRevenue(revenue != null ? revenue : BigDecimal.ZERO);
 
-		// Total registered users
 		dto.setTotalUsers(userRepository.count());
 
-		// Active plans
 		dto.setActivePlans(planRepository.findAll().stream().filter(p -> Boolean.TRUE.equals(p.getIsActive())).count());
 
-		// Refund stats
 		dto.setTotalRefundsProcessed(refundRepository.countByStatus(RefundStatus.PROCESSED));
 		BigDecimal refundAmount = refundRepository.sumProcessedRefundAmounts();
 		dto.setTotalRefundAmount(refundAmount != null ? refundAmount : BigDecimal.ZERO);
@@ -81,7 +75,6 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
 		UserAnalyticsDTO dto = new UserAnalyticsDTO();
 
-		// Total recharges by this user
 		dto.setTotalRecharges(rechargeRepository.countByUser_UserIdAndStatus(currentUserId, RechargeStatus.SUCCESS)
 				+ rechargeRepository.countByUser_UserIdAndStatus(currentUserId, RechargeStatus.FAILED)
 				+ rechargeRepository.countByUser_UserIdAndStatus(currentUserId, RechargeStatus.REFUNDED)
@@ -92,10 +85,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
 		dto.setFailedRecharges(rechargeRepository.countByUser_UserIdAndStatus(currentUserId, RechargeStatus.FAILED));
 
-		// Account status
 		dto.setAccountStatus(user.getStatus());
 
-		// Current active plan — derived from latest SUCCESS recharge
 		List<RechargeTransaction> latestSuccess = rechargeRepository.findLatestSuccessRechargeByUser(currentUserId);
 
 		if (!latestSuccess.isEmpty()) {
@@ -105,17 +96,14 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 			dto.setOperatorName(latest.getPlan().getOperator().getOperatorName());
 			dto.setAmountPaid(latest.getFinalAmount());
 
-			// validUntil = completedAt date + validityDays
 			LocalDate validUntil = latest.getCompletedAt().toLocalDate().plusDays(latest.getPlan().getValidityDays());
 			dto.setValidUntil(validUntil);
 
-			// Data benefits taken directly from plan
 			dto.setDataRemaining(latest.getPlan().getDataBenefits());
 			dto.setCallBenefits(latest.getPlan().getCallBenefits());
 			dto.setSmsBenefits(latest.getPlan().getSmsBenefits());
 
 		} else {
-			// No successful recharge yet — plan fields are null
 			dto.setCurrentPlanName(null);
 			dto.setOperatorName(null);
 			dto.setAmountPaid(null);

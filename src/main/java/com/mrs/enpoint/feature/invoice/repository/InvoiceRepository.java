@@ -8,9 +8,7 @@ import java.util.Optional;
 
 public interface InvoiceRepository extends JpaRepository<RechargeInvoice, Integer> {
 
-    // Get invoice by recharge id
     Optional<RechargeInvoice> findByRechargeTransaction_RechargeId(int rechargeId);
 
-    // All invoices belonging to a specific user (via recharge -> user)
     List<RechargeInvoice> findByRechargeTransaction_User_UserId(int userId);
 }

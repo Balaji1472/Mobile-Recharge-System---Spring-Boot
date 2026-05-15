@@ -8,29 +8,24 @@ import java.time.LocalDateTime;
 
 public class InvoiceResponseDTO {
 
-    // Invoice info
     private int invoiceId;
     private LocalDateTime generatedAt;
 
-    // Recharge info
     private int rechargeId;
     private RechargeStatus rechargeStatus;
     private LocalDateTime initiatedAt;
     private LocalDateTime completedAt;
 
-    // User info
     private int userId;
     private String userName;
     private String userEmail;
-    private String userMobile;      // user's registered mobile
-
-    // Connection info
+    private String userMobile;      
+    
     private int connectionId;
-    private String rechargedMobileNumber;   // the SIM that was recharged
+    private String rechargedMobileNumber;   
     private String operatorName;
     private String circle;
 
-    // Plan info
     private int planId;
     private String planName;
     private int validityDays;
@@ -38,7 +33,6 @@ public class InvoiceResponseDTO {
     private String callBenefits;
     private String smsBenefits;
 
-    // Payment info
     private PaymentMethod paymentMethod;
     private String transactionReference;
     private BigDecimal amountPaid;

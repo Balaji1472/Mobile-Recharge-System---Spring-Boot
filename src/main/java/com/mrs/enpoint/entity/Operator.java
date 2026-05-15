@@ -26,7 +26,7 @@ public class Operator {
 	@OneToMany(mappedBy = "operator", fetch = FetchType.LAZY)
     private List<Plan> plans;
 	
-	@Transient // This prevents JPA from looking for a 'total_plans' column
+	@Transient 
     private int totalPlans;
 
 	public Operator() {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/invoices")
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
@@ -17,17 +18,17 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @GetMapping("/invoices/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<InvoiceResponseDTO> getInvoiceById(@PathVariable int id) {
         return ResponseEntity.ok(invoiceService.getInvoiceById(id));
     }
 
-    @GetMapping("/invoices/my")
+    @GetMapping("/my")
     public ResponseEntity<List<InvoiceResponseDTO>> getMyInvoices() {
         return ResponseEntity.ok(invoiceService.getMyInvoices());
     }
 
-    @GetMapping("/recharges/{rechargeId}/invoice")
+    @GetMapping("/recharges/{rechargeId}")
     public ResponseEntity<InvoiceResponseDTO> getInvoiceByRechargeId(
             @PathVariable int rechargeId) {
         return ResponseEntity.ok(invoiceService.getInvoiceByRechargeId(rechargeId));

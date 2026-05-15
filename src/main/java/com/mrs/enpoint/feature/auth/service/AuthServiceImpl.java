@@ -1,7 +1,12 @@
 package com.mrs.enpoint.feature.auth.service;
 
 import java.time.LocalDateTime;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +20,7 @@ import com.mrs.enpoint.feature.auditlog.enums.EntityName;
 import com.mrs.enpoint.feature.auditlog.service.AuditService;
 import com.mrs.enpoint.feature.auth.dto.AuthResponseDTO;
 import com.mrs.enpoint.feature.auth.dto.ChangePasswordRequestDTO;
+import com.mrs.enpoint.feature.auth.dto.PasswordResetUpdateDTO;
 import com.mrs.enpoint.feature.auth.dto.RegisterRequestDTO;
 import com.mrs.enpoint.feature.auth.dto.UpdateProfileRequestDTO;
 import com.mrs.enpoint.feature.auth.dto.UserResponseDTO;
@@ -50,9 +56,11 @@ public class AuthServiceImpl implements AuthService {
 	private final AuditService auditService;
 	private final RevokedTokenRepository revokedTokenRepository;
 	private final MobileConnectionRepository mobileConnectionRepository;
+	private final JavaMailSender mailSender;
+	private final StringRedisTemplate redisTemplate;
 
 	public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-			PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuditService auditService, RevokedTokenRepository revokedTokenRepository, MobileConnectionRepository mobileConnectionRepository) {
+			PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuditService auditService, RevokedTokenRepository revokedTokenRepository, MobileConnectionRepository mobileConnectionRepository, JavaMailSender mailSender, StringRedisTemplate redisTemplate) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -60,6 +68,8 @@ public class AuthServiceImpl implements AuthService {
 		this.auditService = auditService;
 		this.revokedTokenRepository = revokedTokenRepository;
 		this.mobileConnectionRepository = mobileConnectionRepository;
+		this.mailSender = mailSender;
+		this.redisTemplate = redisTemplate;
 	}
 
 	@Override
@@ -68,7 +78,6 @@ public class AuthServiceImpl implements AuthService {
 
 		String email = request.getEmail().trim().toLowerCase();
 		
-		// mobile number check is there in mobile connection
 		if(!mobileConnectionRepository.existsByMobileNumberAndStatus(request.getMobileNumber(), ConnectionStatus.ACTIVE)) {
 			throw new MobileNotRegisteredException("Mobile number " + request.getMobileNumber() + " is not registered on this platform.");
 		}
@@ -185,15 +194,8 @@ public class AuthServiceImpl implements AuthService {
 
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
 
-//		// check mobile conflict only if it changed
-//		if (!user.getMobileNumber().equals(request.getMobileNumber())
-//				&& userRepository.existsByMobileNumber(request.getMobileNumber())) {
-//			throw new DuplicateAlreadyExistsException("Mobile number already in use");
-//		}
-
 		user.setFullName(request.getFullName());
 		user.setGender(request.getGender());
-//		user.setMobileNumber(request.getMobileNumber());
 
 		return UserMapper.toResponseDTO(userRepository.save(user));
 	}
@@ -214,23 +216,65 @@ public class AuthServiceImpl implements AuthService {
 	public void logout(HttpServletRequest request) {
 	    String authHeader = request.getHeader("Authorization");
 	    
-	    // check if the header is missing or doesn't start with Bearer
 	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 	        throw new NotFoundException("No valid authorization token found.");
 	    }
 
 	    String token = authHeader.substring(7);
 	         
-	    // check if token is ALREADY revoked
 	    if (revokedTokenRepository.existsByToken(token)) {
 	        throw new TokenExpiredException("Token is already revoked and user is already logged out.");
 	    }
 	    
-	    // if valid and not revoked, save it to the blacklist
 	    revokedTokenRepository.save(new RevokedToken(token));
 	    
 	    SecurityContextHolder.clearContext();
 	}
 	
+	public void sendOtpForPasswordReset(String email) {
+	    userRepository.findByEmail(email)
+	            .orElseThrow(() -> new NotFoundException("User not found with email: " + email));
+
+	    String otp = String.valueOf(new Random().nextInt(900000) + 100000);
+
+	    String redisKey = "otp:" + email;
+	    redisTemplate.opsForValue().set(redisKey, otp, 5, TimeUnit.MINUTES);
+
+	    SimpleMailMessage message = new SimpleMailMessage();
+	    message.setTo(email);
+	    message.setSubject("Password Reset OTP");
+	    message.setText("Your OTP for password reset is: " + otp + ". This code expires in 5 minutes.");
+	    
+	    mailSender.send(message);
+	}
+	
+	@Transactional
+	public void resetPasswordWithOtp(PasswordResetUpdateDTO request) {
+	    String redisKey = "otp:" + request.getEmail();
+	    
+	    String storedOtp = redisTemplate.opsForValue().get(redisKey);
+
+	    if (storedOtp == null) {
+	        throw new BusinessException("OTP expired or not requested. Please request a new one.");
+	    }
+	    if (!storedOtp.equals(request.getOtp())) {
+	        throw new InvalidCredentialsException("The OTP you entered is incorrect.");
+	    }
+	    if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+	        throw new BusinessException("Passwords do not match.");
+	    }
+
+	    User user = userRepository.findByEmail(request.getEmail())
+	            .orElseThrow(() -> new NotFoundException("User not found."));
+
+	    user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+	    userRepository.save(user);
+
+
+	    redisTemplate.delete(redisKey);
+	    
+	    auditService.log(user.getUserId(), EntityName.USER, user.getUserId(), 
+	                     AuditAction.PASSWORD_CHANGE, null, "Password reset via OTP");
+	}
 	
 }

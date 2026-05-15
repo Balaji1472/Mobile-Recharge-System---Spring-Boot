@@ -96,7 +96,7 @@ public class OperatorServiceImpl implements OperatorService {
 		Operator operator = operatorRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + id));
 
-		// Check if already active
+		// check if already active
 		if (operator.getStatus() == Status.ACTIVE) {
 			throw new BusinessException("Operator is already in active status.");
 		}
@@ -114,12 +114,11 @@ public class OperatorServiceImpl implements OperatorService {
 		Operator operator = operatorRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Operator not found with id: " + id));
 
-		// Check if already inactive
+		// check if already inactive
 		if (operator.getStatus() == Status.INACTIVE) {
 			throw new BusinessException("Operator is already in inactive status.");
 		}
 
-		// Validation: Check if there are active plans linked to this operator
 		boolean hasActivePlans = planRepository.existsByOperator_OperatorIdAndIsActive(id, true);
 		if (hasActivePlans) {
 			throw new BusinessException("Cannot deactivate operator. There are active plans linked to this operator.");

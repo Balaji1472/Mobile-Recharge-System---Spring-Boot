@@ -19,7 +19,6 @@ public class SavedMobileNumber {
 	@Column(name = "mobile_number", nullable = false, length = 15)
 	private String mobileNumber;
 
-	// operator_id is fetched from mobile_connection by mobile number at save time
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "operator_id", nullable = false)
 	private Operator operator;

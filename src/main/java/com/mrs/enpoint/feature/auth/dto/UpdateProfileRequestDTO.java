@@ -15,10 +15,6 @@ public class UpdateProfileRequestDTO {
 	@NotNull(message = "Gender is required")
 	private Gender gender;
 
-//	@NotBlank(message = "Mobile number is required")
-//	@Pattern(regexp = "^[6-9]\\d{9}$", message = "Invalid Indian mobile number")
-//	private String mobileNumber;
-
 	public String getFullName() {
 		return fullName;
 	}
@@ -35,11 +31,4 @@ public class UpdateProfileRequestDTO {
 		this.gender = gender;
 	}
 
-//	public String getMobileNumber() {
-//		return mobileNumber;
-//	}
-//
-//	public void setMobileNumber(String mobileNumber) {
-//		this.mobileNumber = mobileNumber;
-//	}
 }

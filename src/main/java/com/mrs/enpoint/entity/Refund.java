@@ -15,7 +15,6 @@ public class Refund {
     @Column(name = "refund_id")
     private int refundId;
 
-    // One refund per payment
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id", nullable = false, unique = true)
     private Payment payment;

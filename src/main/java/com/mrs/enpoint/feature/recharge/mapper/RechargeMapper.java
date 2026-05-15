@@ -8,18 +8,13 @@ public class RechargeMapper {
 	private RechargeMapper() {
 	}
 
-	/**
-	 * @param recharge   the recharge entity
-	 * @param userMobile the logged-in user's registered mobile number
-	 */
 	public static RechargeResponseDTO toResponseDTO(RechargeTransaction recharge, String userMobile, String appliedOfferName) {
 		RechargeResponseDTO dto = new RechargeResponseDTO();
 		dto.setRechargeId(recharge.getRechargeId());
 		dto.setUserId(recharge.getUser().getUserId());
 		dto.setConnectionId(recharge.getConnection().getConnectionId());
 		dto.setMobileNumber(recharge.getConnection().getMobileNumber());
-		// isOwnNumber = true when the recharged SIM belongs to user's own registered
-		// mobile
+
 		dto.setOwnNumber(recharge.getConnection().getMobileNumber().equals(userMobile));
 		dto.setAppliedOfferName(appliedOfferName);
 		dto.setPlanId(recharge.getPlan().getPlanId());

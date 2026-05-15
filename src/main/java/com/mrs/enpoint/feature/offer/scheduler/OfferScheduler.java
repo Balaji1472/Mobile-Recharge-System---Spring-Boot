@@ -18,7 +18,6 @@ public class OfferScheduler {
 		this.auditService = auditService;
 	}
 
-	// runs every hour
 	@Scheduled(cron = "0 0 * * * ?")
 	public void deactivateExpiredOffers() {
 		int updatedCount = offerRepository.deactivateExpiredOffers();

@@ -8,12 +8,9 @@ import java.util.Optional;
 
 public interface SavedNumberRepository extends JpaRepository<SavedMobileNumber, Integer> {
 
-    // All saved numbers for a user
     List<SavedMobileNumber> findByUser_UserId(int userId);
 
-    // Check duplicate: same user + same mobile number
     boolean existsByUser_UserIdAndMobileNumber(int userId, String mobileNumber);
 
-    // Find specific saved number by id and user (ownership check)
     Optional<SavedMobileNumber> findByIdAndUser_UserId(int id, int userId);
 }

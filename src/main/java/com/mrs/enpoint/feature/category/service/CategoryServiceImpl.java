@@ -63,7 +63,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<CategoryResponseDTO> getAllCategories() {
-	    // We use the new query that fetches categories and plans together
 	    return categoryRepository.findAllWithPlanCount()
 	            .stream()
 	            .map(category -> CategoryMapper.toResponseDTO(category))

@@ -38,7 +38,6 @@ public class OfferServiceImpl implements OfferService {
 	@Transactional
 	public OfferResponseDTO createOffer(OfferRequestDTO request) {
 
-		// validation
 		validateRequest(request);
 		
 		String offerTitle = request.getTitle().toUpperCase().trim();
@@ -55,7 +54,6 @@ public class OfferServiceImpl implements OfferService {
 		offer.setEndDate(request.getEndDate());
 		offer.setIsActive(true); // default
 
-		// save
 		Offer saved = offerRepository.save(offer);
 
 		auditService.log(securityUtils.getCurrentUserId(), EntityName.OFFER, saved.getOfferId(),

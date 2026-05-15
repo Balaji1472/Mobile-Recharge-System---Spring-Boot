@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
-    // Latest payment attempt for a given recharge
     Optional<Payment> findTopByRechargeTransaction_RechargeIdOrderByAttemptNumberDesc(int rechargeId);
+    
+    Optional<Payment> findByTransactionReference(String transactionReference);
+
 }

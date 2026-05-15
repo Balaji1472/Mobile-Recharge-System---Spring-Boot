@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mrs.enpoint.feature.auth.dto.AuthResponseDTO;
 import com.mrs.enpoint.feature.auth.dto.ChangePasswordRequestDTO;
 import com.mrs.enpoint.feature.auth.dto.LoginRequestDTO;
+import com.mrs.enpoint.feature.auth.dto.PasswordResetUpdateDTO;
 import com.mrs.enpoint.feature.auth.dto.RefreshTokenRequestDTO;
 import com.mrs.enpoint.feature.auth.dto.RegisterRequestDTO;
 import com.mrs.enpoint.feature.auth.dto.UpdateProfileRequestDTO;
@@ -60,6 +62,18 @@ public class AuthController {
     public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequestDTO request) {
         authService.changePassword(request);
         return ResponseEntity.ok("Password changed successfully");
+    }
+    
+    @PostMapping("/forgot-password/request")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        authService.sendOtpForPasswordReset(email);
+        return ResponseEntity.ok("OTP sent to " + email);
+    }
+    
+    @PostMapping("/forgot-password/verify")
+    public ResponseEntity<String> verifyAndReset(@Valid @RequestBody PasswordResetUpdateDTO request) {
+        authService.resetPasswordWithOtp(request);
+        return ResponseEntity.ok("Password updated successfully. Please login with your new password.");
     }
 
     @PutMapping("/profile")
